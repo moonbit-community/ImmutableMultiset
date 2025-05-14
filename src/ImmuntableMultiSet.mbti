@@ -1,4 +1,4 @@
-package "bigorangeqwq/ImmuntableMultiSet/lib"
+package "BigOrangeQWQ/ImmuntableMultiSet"
 
 import(
   "moonbitlang/core/immut/hashmap"
@@ -24,8 +24,6 @@ fn from_iter2[T : Eq + Hash](Iter2[T, Int]) -> ImmutableMultiset[T]
 
 fn from_set[T : Eq + Hash](@set.Set[T]) -> ImmutableMultiset[T]
 
-fn insert[T : Eq + Hash](ImmutableMultiset[T], T, times~ : Int = ..) -> ImmutableMultiset[T]
-
 fn intersection[T : Eq + Hash](ImmutableMultiset[T], ImmutableMultiset[T]) -> ImmutableMultiset[T]
 
 fn is_empty[T](ImmutableMultiset[T]) -> Bool
@@ -39,6 +37,8 @@ fn of[T : Eq + Hash](FixedArray[T]) -> ImmutableMultiset[T]
 fn op_get[T : Eq + Hash](ImmutableMultiset[T], T) -> Int
 
 fn remove[T : Eq + Hash](ImmutableMultiset[T], T, times~ : Int = ..) -> ImmutableMultiset[T]
+
+fn set[T : Eq + Hash](ImmutableMultiset[T], T, times~ : Int = ..) -> ImmutableMultiset[T]
 
 fn size[T](ImmutableMultiset[T]) -> Int
 
@@ -55,7 +55,6 @@ impl ImmutableMultiset {
   count[T : Eq + Hash](Self[T], T) -> Int
   difference[T : Eq + Hash](Self[T], Self[T]) -> Self[T]
   elems[T : Eq + Hash](Self[T]) -> Iter[T]
-  insert[T : Eq + Hash](Self[T], T, times~ : Int = ..) -> Self[T]
   intersection[T : Eq + Hash](Self[T], Self[T]) -> Self[T]
   is_empty[T](Self[T]) -> Bool
   iter[T : Eq + Hash](Self[T]) -> Iter[(T, Int)]
@@ -63,6 +62,7 @@ impl ImmutableMultiset {
   new[T]() -> Self[T]
   op_get[T : Eq + Hash](Self[T], T) -> Int
   remove[T : Eq + Hash](Self[T], T, times~ : Int = ..) -> Self[T]
+  set[T : Eq + Hash](Self[T], T, times~ : Int = ..) -> Self[T]
   size[T](Self[T]) -> Int
   union[T : Eq + Hash](Self[T], Self[T]) -> Self[T]
 }
