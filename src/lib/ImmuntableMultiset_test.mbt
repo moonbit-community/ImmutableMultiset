@@ -1,12 +1,12 @@
 ///|
-test "multiset::new" {
+test "ImmuntableMultiset::new" {
   let mut set = ImmutableMultiset::new()
   set = set.add(1)
   assert_eq!(set.size(), 1)
 }
 
 ///|
-test "multiset::empty " {
+test "ImmuntableMultiset::empty " {
   let mut set = ImmutableMultiset::new()
   set = set.add(1)
   assert_eq!(set.size(), 1)
@@ -14,7 +14,7 @@ test "multiset::empty " {
   assert_eq!(set.contains(2), false)
 }
 
-test "multiset::add" {
+test "ImmuntableMultiset::add" {
   let mut set = ImmutableMultiset::new()
   set = set.add(1)
   set = set.add(2)
@@ -22,7 +22,7 @@ test "multiset::add" {
 }
 
 ///|
-test "multiset::count" {
+test "ImmuntableMultiset::count" {
   let mut set = ImmutableMultiset::new()
   set = set.add("test")
   set = set.add("testitem")
@@ -31,7 +31,7 @@ test "multiset::count" {
   assert_eq!(set.count("testitem"), 3)
 }
 
-test "multiset::remove" {
+test "ImmuntableMultiset::remove" {
   let mut set = ImmutableMultiset::new()
   set = set.add("test")
   set = set.add("testitem")
