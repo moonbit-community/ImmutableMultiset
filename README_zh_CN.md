@@ -1,12 +1,12 @@
-# ImmutableMultiset
+# ImmuntableMultiset 
 
-# Installation
+# 安装
 
 ```bash
 moon add BigOrangeQWQ/immunt_multiset
 ```
 
-# Usage
+# 使用
 
 ```moonbit
 fn main {
