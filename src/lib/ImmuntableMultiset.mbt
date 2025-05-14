@@ -36,7 +36,7 @@ pub fn add[T : Eq + Hash](
   times~ : Int = 1
 ) -> ImmutableMultiset[T] {
   let element_count = self.count(item)
-  { map: self.map.add(item, element_count + times), size: self.size }
+  { map: self.map.add(item, element_count + times), size: self.size + times }
 }
 
 ///|
@@ -67,12 +67,10 @@ pub fn remove[T : Eq + Hash](
   let element_count = self.count(item)
   if times == -1 {
     { map: self.map.remove(item), size: self.size - element_count }
+  } else if element_count > times {
+    { map: self.map.add(item, element_count - times), size: self.size - times }
   } else {
-    if element_count > times {
-      { map: self.map.add(item, element_count - times), size: self.size - times }
-    } else {
-      { map: self.map.remove(item), size: self.size - element_count }
-    }
+    { map: self.map.remove(item), size: self.size - element_count }
   }
 }
 
@@ -95,21 +93,26 @@ pub fn intersection[T : Eq + Hash](
   self : ImmutableMultiset[T],
   other : ImmutableMultiset[T]
 ) -> ImmutableMultiset[T] {
-  let mut new_set = ImmutableMultiset::new()
-  if self.size() > other.size() {
-    for item, count in other.map.iter2() {
+  let new_set = if self.size() > other.size() {
+    let mut new_set = other
+    for item, count in other.iter2() {
       let self_count = self.count(item)
       if self_count > 0 {
-        new_set = new_set.insert(item, times=@math.minimum(count, self_count))
+        let min_count = @math.minimum(count, self_count)
+        new_set = new_set.insert(item, times=min_count)
       }
     }
+    new_set
   } else {
-    for item, count in self.map.iter2() {
+    let mut new_set = self
+    for item, count in self.iter2() {
       let other_count = other.count(item)
       if other_count > 0 {
-        new_set = new_set.insert(item, times=@math.minimum(count, other_count))
+        let min_count = @math.minimum(count, other_count)
+        new_set = new_set.insert(item, times=min_count)
       }
     }
+    new_set
   }
   new_set
 }
@@ -122,15 +125,15 @@ pub fn difference[T : Eq + Hash](
   self : ImmutableMultiset[T],
   other : ImmutableMultiset[T]
 ) -> ImmutableMultiset[T] {
-  let mut new_set = ImmutableMultiset::new()
-  for item, count in self.map.iter2() {
+  let mut new_set = self
+  for item, count in self.iter2() {
     let other_count = other.count(item)
     if other_count > 0 {
       if count > other_count {
-        new_set = new_set.add(item, times=count - other_count)
+        new_set = new_set.remove(item, times=other_count)
+      } else {
+        new_set = new_set.remove(item, times=-1)
       }
-    } else {
-      new_set = new_set.add(item, times=count)
     }
   }
   new_set
@@ -143,12 +146,18 @@ pub fn union[T : Eq + Hash](
   self : ImmutableMultiset[T],
   other : ImmutableMultiset[T]
 ) -> ImmutableMultiset[T] {
-  let mut new_set = ImmutableMultiset::new()
-  for item, count in self.map.iter2() {
-    new_set = new_set.add(item, times=count)
-  }
-  for item, count in other.map.iter2() {
-    new_set = new_set.add(item, times=count)
+  let new_set = if self.size() > other.size() {
+    let mut new_set = self
+    for item, count in other.iter2() {
+      new_set = self.add(item, times=count)
+    }
+    new_set
+  } else {
+    let mut new_set = other
+    for item, count in self.iter2() {
+      new_set = new_set.add(item, times=count)
+    }
+    new_set
   }
   new_set
 }
