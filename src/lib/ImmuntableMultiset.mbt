@@ -35,6 +35,10 @@ pub fn add[T : Eq + Hash](
   item : T,
   times~ : Int = 1
 ) -> ImmutableMultiset[T] {
+  if times < 1 {
+    abort("times must be 1 or greater")
+  }
+
   let element_count = self.count(item)
   { map: self.map.add(item, element_count + times), size: self.size + times }
 }
@@ -46,6 +50,10 @@ pub fn insert[T : Eq + Hash](
   item : T,
   times~ : Int = 1
 ) -> ImmutableMultiset[T] {
+  if times < 1 {
+    abort("times must be 1 or greater")
+  }
+  
   let count = self.count(item)
   let new_size = if count == 0 {
     self.size + times
@@ -64,7 +72,12 @@ pub fn remove[T : Eq + Hash](
   item : T,
   times~ : Int = 1
 ) -> ImmutableMultiset[T] {
+  if times < -1 {
+    abort("times must be -1 or greater")
+  }
+
   let element_count = self.count(item)
+
   if times == -1 {
     { map: self.map.remove(item), size: self.size - element_count }
   } else if element_count > times {
