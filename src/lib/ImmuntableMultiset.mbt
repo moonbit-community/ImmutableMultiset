@@ -1,7 +1,7 @@
 ///|
 pub struct ImmutableMultiset[T] {
   mut map : @immut/hashmap.T[T, Int]
-  mut size : Int
+  size : Int
 }
 
 ///|
@@ -36,9 +36,24 @@ pub fn add[T : Eq + Hash](
   times~ : Int = 1
 ) -> ImmutableMultiset[T] {
   let element_count = self.count(item)
-  self.map = self.map.add(item, element_count + times)
-  self.size += times
-  self
+  { map: self.map.add(item, element_count + times), size: self.size }
+}
+
+///|
+/// Insert an item to the multiset, if it already exists, replace the count
+pub fn insert[T : Eq + Hash](
+  self : ImmutableMultiset[T],
+  item : T,
+  times~ : Int = 1
+) -> ImmutableMultiset[T] {
+  let count = self.count(item)
+  let new_size = if count == 0 {
+    self.size + times
+  } else {
+    self.size - count + times
+  }
+  self.map = self.map.add(item, times)
+  { map: self.map.add(item, times), size: new_size }
 }
 
 ///|
@@ -47,20 +62,18 @@ pub fn add[T : Eq + Hash](
 pub fn remove[T : Eq + Hash](
   self : ImmutableMultiset[T],
   item : T,
-  count~ : Int = 1
+  times~ : Int = 1
 ) -> ImmutableMultiset[T] {
   let element_count = self.count(item)
-  if count == -1 {
-    self.map = self.map.remove(item)
-    self.size -= element_count
-  } else if element_count > count {
-    self.map = self.map.add(item, element_count - count)
-    self.size -= count
+  if times == -1 {
+    { map: self.map.remove(item), size: self.size - element_count }
   } else {
-    self.map = self.map.remove(item)
-    self.size -= element_count
+    if element_count > times {
+      { map: self.map.add(item, element_count - times), size: self.size - times }
+    } else {
+      { map: self.map.remove(item), size: self.size - element_count }
+    }
   }
-  self
 }
 
 ///|
@@ -87,14 +100,14 @@ pub fn intersection[T : Eq + Hash](
     for item, count in other.map.iter2() {
       let self_count = self.count(item)
       if self_count > 0 {
-        new_set = new_set.add(item, times=@math.minimum(count, self_count))
+        new_set = new_set.insert(item, times=@math.minimum(count, self_count))
       }
     }
   } else {
     for item, count in self.map.iter2() {
       let other_count = other.count(item)
       if other_count > 0 {
-        new_set = new_set.add(item, times=@math.minimum(count, other_count))
+        new_set = new_set.insert(item, times=@math.minimum(count, other_count))
       }
     }
   }
@@ -105,7 +118,7 @@ pub fn intersection[T : Eq + Hash](
 /// Two multisets difference operation
 /// If same item exists in both multisets, the difference of counts is taken
 /// If the count of an item in the first multiset is less than the second, it is removed
-fn difference[T : Eq + Hash](
+pub fn difference[T : Eq + Hash](
   self : ImmutableMultiset[T],
   other : ImmutableMultiset[T]
 ) -> ImmutableMultiset[T] {
@@ -132,13 +145,28 @@ pub fn union[T : Eq + Hash](
 ) -> ImmutableMultiset[T] {
   let mut new_set = ImmutableMultiset::new()
   for item, count in self.map.iter2() {
-    let other_count = other.count(item)
-    new_set = new_set.add(item, times=count + other_count)
+    new_set = new_set.add(item, times=count)
+  }
+  for item, count in other.map.iter2() {
+    new_set = new_set.add(item, times=count)
   }
   new_set
 }
 
-// overload operators
+///|
+pub fn elems[T : Eq + Hash](self : ImmutableMultiset[T]) -> Iter[T] {
+  self.map.keys()
+}
+
+///|
+pub fn iter[T : Eq + Hash](self : ImmutableMultiset[T]) -> Iter[(T, Int)] {
+  self.map.iter()
+}
+
+///|
+pub fn iter2[T : Eq + Hash](self : ImmutableMultiset[T]) -> Iter2[T, Int] {
+  self.map.iter2()
+}
 
 ///|
 pub fn op_get[T : Eq + Hash](self : ImmutableMultiset[T], item : T) -> Int {
@@ -167,6 +195,23 @@ pub impl[T : Eq + Hash] Sub for ImmutableMultiset[T] with op_sub(
   other : ImmutableMultiset[T]
 ) {
   self.difference(other)
+}
+
+///|
+pub impl[T : Eq + Hash] Eq for ImmutableMultiset[T] with op_equal(
+  self : ImmutableMultiset[T],
+  other : ImmutableMultiset[T]
+) {
+  if self.size != other.size {
+    return false
+  }
+  for item, count in self.map.iter2() {
+    let other_count = other.count(item)
+    if count != other_count {
+      return false
+    }
+  }
+  true
 }
 
 ///|
