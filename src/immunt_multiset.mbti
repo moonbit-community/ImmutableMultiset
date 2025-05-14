@@ -29,6 +29,8 @@ fn iter[T : Eq + Hash](ImmutableMultiset[T]) -> Iter[(T, Int)]
 
 fn iter2[T : Eq + Hash](ImmutableMultiset[T]) -> Iter2[T, Int]
 
+fn new[T]() -> ImmutableMultiset[T]
+
 fn of[T : Eq + Hash](FixedArray[T]) -> ImmutableMultiset[T]
 
 fn op_get[T : Eq + Hash](ImmutableMultiset[T], T) -> Int
@@ -66,6 +68,7 @@ impl ImmutableMultiset {
 impl[T : Eq + Hash] BitAnd for ImmutableMultiset[T]
 impl[T : Eq + Hash] BitOr for ImmutableMultiset[T]
 impl[T : Eq + Hash] Eq for ImmutableMultiset[T]
+impl[T : Eq + Hash + Show] Show for ImmutableMultiset[T]
 impl[T : Eq + Hash] Sub for ImmutableMultiset[T]
 
 // Type aliases
