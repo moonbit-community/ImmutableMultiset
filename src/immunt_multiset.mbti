@@ -1,8 +1,7 @@
-package "BigOrangeQWQ/ImmuntableMultiSet"
+package "BigOrangeQWQ/immunt_multiset"
 
 import(
   "moonbitlang/core/immut/hashmap"
-  "moonbitlang/core/set"
 )
 
 // Values
@@ -21,8 +20,6 @@ fn from_array[T : Eq + Hash](Array[T]) -> ImmutableMultiset[T]
 fn from_iter[T : Eq + Hash](Iter[T]) -> ImmutableMultiset[T]
 
 fn from_iter2[T : Eq + Hash](Iter2[T, Int]) -> ImmutableMultiset[T]
-
-fn from_set[T : Eq + Hash](@set.Set[T]) -> ImmutableMultiset[T]
 
 fn intersection[T : Eq + Hash](ImmutableMultiset[T], ImmutableMultiset[T]) -> ImmutableMultiset[T]
 

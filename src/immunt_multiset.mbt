@@ -358,6 +358,10 @@ pub impl[T : Eq + Hash] Eq for ImmutableMultiset[T] with op_equal(
   true
 }
 
+pub impl[T : Eq + Hash + Show] Show for ImmutableMultiset[T] with output(self: ImmutableMultiset[T], logger: &Logger) {
+  logger.write_iter(self.iter(), prefix="@ImmutableMultiset.of([", suffix="])")
+}
+
 ///| Converts a FixedArray to an ImmutableMultiset.
 ///
 /// # Examples
@@ -401,13 +405,4 @@ pub fn from_iter2[T : Eq + Hash](iter : Iter2[T, Int]) -> ImmutableMultiset[T] {
     set = set.add(item, times~)
   }
   set
-}
-
-///| Converts a Set to an ImmutableMultiset.
-pub fn from_set[T : Eq + Hash](set : Set[T]) -> ImmutableMultiset[T] {
-  let mut multiset = ImmutableMultiset::new()
-  for item in set {
-    multiset = multiset.add(item)
-  }
-  multiset
 }
