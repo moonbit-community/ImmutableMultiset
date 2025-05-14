@@ -1,0 +1,49 @@
+package "bigorangeqwq/ImmuntableMultiSet/lib"
+
+// Values
+fn add[T : Eq + Hash](ImmutableMultiset[T], T) -> ImmutableMultiset[T]
+
+fn contains[T : Eq + Hash](ImmutableMultiset[T], T) -> Bool
+
+fn count[T : Eq + Hash](ImmutableMultiset[T], T) -> Int
+
+fn intersection[T : Eq + Hash](ImmutableMultiset[T], ImmutableMultiset[T]) -> ImmutableMultiset[T]
+
+fn is_empty[T](ImmutableMultiset[T]) -> Bool
+
+fn of[T : Eq + Hash](FixedArray[T]) -> ImmutableMultiset[T]
+
+fn op_get[T : Eq + Hash](ImmutableMultiset[T], T) -> Int
+
+fn remove[T : Eq + Hash](ImmutableMultiset[T], T, count~ : Int = ..) -> ImmutableMultiset[T]
+
+fn size[T](ImmutableMultiset[T]) -> Int
+
+fn union[T : Eq + Hash](ImmutableMultiset[T], ImmutableMultiset[T]) -> ImmutableMultiset[T]
+
+// Types and methods
+type Bucket[T]
+
+pub enum ImmutableMultiset[T] {
+  Empty
+  Bucket(Bucket[T])
+  Singleton(T, Int)
+}
+impl ImmutableMultiset {
+  add[T : Eq + Hash](Self[T], T) -> Self[T]
+  contains[T : Eq + Hash](Self[T], T) -> Bool
+  count[T : Eq + Hash](Self[T], T) -> Int
+  intersection[T : Eq + Hash](Self[T], Self[T]) -> Self[T]
+  is_empty[T](Self[T]) -> Bool
+  new[T]() -> Self[T]
+  op_get[T : Eq + Hash](Self[T], T) -> Int
+  remove[T : Eq + Hash](Self[T], T, count~ : Int = ..) -> Self[T]
+  singleton[T](T) -> Self[T]
+  size[T](Self[T]) -> Int
+  union[T : Eq + Hash](Self[T], Self[T]) -> Self[T]
+}
+
+// Type aliases
+
+// Traits
+

@@ -1,0 +1,10 @@
+{
+  "name": "bigorangeqwq/ImmuntableMultiSet",
+  "version": "0.1.0",
+  "readme": "README.md",
+  "repository": "",
+  "license": "Apache-2.0",
+  "keywords": ["multiset", "data structure", "immutable"],
+  "description": "data structure for immutable multiset",
+  "source": "src"
+}
