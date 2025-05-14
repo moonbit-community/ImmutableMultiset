@@ -1,107 +1,24 @@
 ///|
-pub enum ImmutableMultiset[T] {
-  Empty
-  Bucket(Bucket[T])
-  Singleton(T, Int)
-}
-
-///|
-struct Bucket[T] {
-  map : @immut/hashmap.T[T, Int]
-  size : Int
-}
-
-///|
-fn Bucket::new[T]() -> Bucket[T] {
-  { map: @immut/hashmap.new(), size: 0 }
-}
-
-///|
-fn Bucket::contains[T : Eq + Hash](bucket : Bucket[T], item : T) -> Bool {
-  bucket.map.contains(item)
-}
-
-///|
-fn Bucket::add[T : Eq + Hash](bucket : Bucket[T], item : T) -> Bucket[T] {
-  let cnt = bucket.map.get(item).or_else(fn() { 0 })
-  let new_map = bucket.map.add(item, cnt + 1)
-  { map: new_map, size: bucket.size + 1 }
-}
-
-///|
-fn Bucket::insert[T : Eq + Hash](
-  bucket : Bucket[T],
-  item : T,
-  count : Int
-) -> Bucket[T] {
-  let cnt = bucket.map.get(item).or_else(fn() { 0 })
-  let new_map = bucket.map.add(item, cnt + count)
-  { map: new_map, size: bucket.size + count }
-}
-
-///|
-fn Bucket::size[T](bucket : Bucket[T]) -> Int {
-  bucket.size
-}
-
-///|
-fn Bucket::get[T : Eq + Hash](bucket : Bucket[T], item : T) -> Int {
-  bucket.map.get(item).or_else(fn() { 0 })
-}
-
-///|
-fn Bucket::remove[T : Eq + Hash](bucket : Bucket[T], item : T, count~: Int = 1) -> Bucket[T] {
-  let cnt = bucket.map.get(item).or_else(fn() { 0 })
-  let new_map = if count == -1 {
-    bucket.map.remove(item)
-  } else {
-    if cnt - count <= 0 {
-      bucket.map.remove(item)
-    } else {
-      bucket.map.add(item, cnt - count)
-    }
-  }
-  { map: new_map, size: bucket.size - cnt }
-}
-
-///|
-fn Bucket::iter[T : Eq + Hash](bucket : Bucket[T]) -> Iter[(T, Int)] {
-  bucket.map.iter()
-}
-
-///|
-fn Bucket::iter2[T : Eq + Hash](bucket : Bucket[T]) -> Iter2[T, Int] {
-  bucket.map.iter2()
+pub struct ImmutableMultiset[T] {
+  mut map : @immut/hashmap.T[T, Int]
+  mut size : Int
 }
 
 ///|
 pub fn contains[T : Eq + Hash](self : ImmutableMultiset[T], item : T) -> Bool {
-  match self {
-    Empty => false
-    Bucket(bucket) => bucket.contains(item)
-    Singleton(v, _) => v == item
-  }
+  self.map.contains(item)
 }
 
 ///|
 pub fn ImmutableMultiset::new[T]() -> ImmutableMultiset[T] {
-  Empty
-}
-
-///|
-pub fn ImmutableMultiset::singleton[T](item : T) -> ImmutableMultiset[T] {
-  Singleton(item, 1)
+  { map: @immut/hashmap.new(), size: 0 }
 }
 
 ///|
 /// Count the number of occurrences of an item in the multiset
 /// 
 pub fn count[T : Eq + Hash](self : ImmutableMultiset[T], item : T) -> Int {
-  match self {
-    Empty => 0
-    Bucket(bucket) => bucket.get(item)
-    Singleton(v, cnt) => if v == item { cnt } else { 0 }
-  }
+  self.map.get(item).or_else(fn() { 0 })
 }
 
 ///| 
@@ -116,18 +33,12 @@ pub fn count[T : Eq + Hash](self : ImmutableMultiset[T], item : T) -> Int {
 pub fn add[T : Eq + Hash](
   self : ImmutableMultiset[T],
   item : T,
-  count~ : Int = 1
+  times~ : Int = 1
 ) -> ImmutableMultiset[T] {
-  match self {
-    Empty => Singleton(item, 1)
-    Bucket(bucket) => Bucket(bucket.insert(item, count))
-    Singleton(v, cnt) =>
-      if v == item {
-        Singleton(v, cnt + 1)
-      } else {
-        Bucket(Bucket::new().insert(v, cnt).insert(item, count))
-      }
-  }
+  let element_count = self.count(item)
+  self.map = self.map.add(item, element_count + times)
+  self.size += times
+  self
 }
 
 ///|
@@ -138,41 +49,28 @@ pub fn remove[T : Eq + Hash](
   item : T,
   count~ : Int = 1
 ) -> ImmutableMultiset[T] {
-  match self {
-    Empty => Empty
-    Bucket(bucket) => {
-      let bucket = bucket.remove(item, count=count)
-      if bucket.size() == 0 {
-        Empty
-      } else {
-        Bucket(bucket)
-      }
-    }
-    Singleton(v, _) => if v == item { Empty } else { self }
+  let element_count = self.count(item)
+  if count == -1 {
+    self.map = self.map.remove(item)
+    self.size -= element_count
+  } else if element_count > count {
+    self.map = self.map.add(item, element_count - count)
+    self.size -= count
+  } else {
+    self.map = self.map.remove(item)
+    self.size -= element_count
   }
+  self
 }
 
 ///|
 pub fn size[T](self : ImmutableMultiset[T]) -> Int {
-  match self {
-    Empty => 0
-    Bucket(bucket) => bucket.size()
-    Singleton(_, _) => 1
-  }
+  self.size
 }
 
 ///|
 pub fn is_empty[T](self : ImmutableMultiset[T]) -> Bool {
-  match self {
-    Empty => true
-    Bucket(bucket) => bucket.size() == 0
-    Singleton(_, _) => false
-  }
-}
-
-///|
-pub fn op_get[T : Eq + Hash](self : ImmutableMultiset[T], item : T) -> Int {
-  self.count(item)
+  self.size == 0
 }
 
 // Two multisets operations
@@ -184,56 +82,23 @@ pub fn intersection[T : Eq + Hash](
   self : ImmutableMultiset[T],
   other : ImmutableMultiset[T]
 ) -> ImmutableMultiset[T] {
-  match self {
-    Empty => Empty
-    Bucket(bucket) =>
-      match other {
-        Empty => self
-        Bucket(other_bucket) => {
-          let mut new_bucket = Bucket::new()
-          if bucket.size() > other_bucket.size() {
-            for item, count in other_bucket.iter2() {
-              let bucket_cnt = bucket.get(item)
-              new_bucket = new_bucket.insert(
-                item,
-                @math.minimum(bucket_cnt, count),
-              )
-            }
-          } else {
-            for item, count in bucket.iter2() {
-              let bucket_cnt = bucket.get(item)
-              new_bucket = new_bucket.insert(
-                item,
-                @math.minimum(bucket_cnt, count),
-              )
-            }
-          }
-          Bucket(new_bucket)
-        }
-        Singleton(value, cnt) =>
-          if bucket.contains(value) {
-            Singleton(value, @math.minimum(bucket.get(value), cnt))
-          } else {
-            Empty
-          }
+  let mut new_set = ImmutableMultiset::new()
+  if self.size() > other.size() {
+    for item, count in other.map.iter2() {
+      let self_count = self.count(item)
+      if self_count > 0 {
+        new_set = new_set.add(item, times=@math.minimum(count, self_count))
       }
-    Singleton(value, count) =>
-      match other {
-        Empty => Empty
-        Singleton(other_value, other_count) =>
-          if value == other_value {
-            Singleton(value, @math.minimum(count, other_count))
-          } else {
-            Empty
-          }
-        Bucket(other_bucket) =>
-          if other_bucket.contains(value) {
-            Singleton(value, @math.minimum(count, other_bucket.get(value)))
-          } else {
-            Empty
-          }
+    }
+  } else {
+    for item, count in self.map.iter2() {
+      let other_count = other.count(item)
+      if other_count > 0 {
+        new_set = new_set.add(item, times=@math.minimum(count, other_count))
       }
+    }
   }
+  new_set
 }
 
 ///|
@@ -244,49 +109,18 @@ fn difference[T : Eq + Hash](
   self : ImmutableMultiset[T],
   other : ImmutableMultiset[T]
 ) -> ImmutableMultiset[T] {
-  match self {
-    Empty => Empty
-    Bucket(bucket) =>
-      match other {
-        Empty => self
-        Bucket(other_bucket) => {
-          let mut new_bucket = Bucket::new()
-          for item, count in bucket.iter2() {
-            let other_count = other_bucket.get(item)
-            if count > other_count {
-              new_bucket = new_bucket.insert(item, count - other_count)
-            }
-          }
-          Bucket(new_bucket)
-        }
-        Singleton(value, cnt) =>
-          if bucket.contains(value) {
-            Singleton(value, @math.maximum(cnt - other.count(value), 0))
-          } else {
-            self
-          }
+  let mut new_set = ImmutableMultiset::new()
+  for item, count in self.map.iter2() {
+    let other_count = other.count(item)
+    if other_count > 0 {
+      if count > other_count {
+        new_set = new_set.add(item, times=count - other_count)
       }
-    Singleton(value, count) =>
-      match other {
-        Empty => self
-        Singleton(other_value, other_count) =>
-          if value == other_value {
-            if count > other_count {
-              Singleton(value, count - other_count)
-            } else {
-              Empty
-            }
-          } else {
-            self
-          }
-        Bucket(other_bucket) =>
-          if other_bucket.contains(value) {
-            Singleton(value, @math.maximum(count - other_bucket.get(value), 0))
-          } else {
-            self
-          }
-      }
+    } else {
+      new_set = new_set.add(item, times=count)
+    }
   }
+  new_set
 }
 
 ///|
@@ -296,45 +130,45 @@ pub fn union[T : Eq + Hash](
   self : ImmutableMultiset[T],
   other : ImmutableMultiset[T]
 ) -> ImmutableMultiset[T] {
-  match self {
-    Empty => other
-    Bucket(bucket) =>
-      match other {
-        Empty => self
-        Bucket(other_bucket) => {
-          let mut new_bucket = Bucket::new()
-          for item, count in bucket.iter2() {
-            let other_count = other_bucket.get(item)
-            new_bucket = new_bucket.insert(item, count + other_count)
-          }
-          Bucket(new_bucket)
-        }
-        Singleton(value, cnt) => Bucket(bucket.insert(value, cnt))
-      }
-    Singleton(value, count) =>
-      match other {
-        Empty => self
-        Bucket(other_bucket) => Bucket(other_bucket.insert(value, count))
-        Singleton(other_value, other_count) =>
-          if value == other_value {
-            Singleton(value, other_count + count)
-          } else {
-            let new_bucket = Bucket::new()
-              .insert(value, count)
-              .insert(other_value, other_count)
-            Bucket(new_bucket)
-          }
-      }
+  let mut new_set = ImmutableMultiset::new()
+  for item, count in self.map.iter2() {
+    let other_count = other.count(item)
+    new_set = new_set.add(item, times=count + other_count)
   }
+  new_set
 }
-
 
 // overload operators
 
+///|
+pub fn op_get[T : Eq + Hash](self : ImmutableMultiset[T], item : T) -> Int {
+  self.count(item)
+}
 
+///|
+pub impl[T : Eq + Hash] BitOr for ImmutableMultiset[T] with lor(
+  self,
+  other : ImmutableMultiset[T]
+) {
+  self.union(other)
+}
 
+///|
+pub impl[T : Eq + Hash] BitAnd for ImmutableMultiset[T] with land(
+  self,
+  other : ImmutableMultiset[T]
+) {
+  self.intersection(other)
+}
 
-// other types for conversion
+///|
+pub impl[T : Eq + Hash] Sub for ImmutableMultiset[T] with op_sub(
+  self,
+  other : ImmutableMultiset[T]
+) {
+  self.difference(other)
+}
+
 ///|
 pub fn of[T : Eq + Hash](arr : FixedArray[T]) -> ImmutableMultiset[T] {
   let mut set = ImmutableMultiset::new()
@@ -342,4 +176,40 @@ pub fn of[T : Eq + Hash](arr : FixedArray[T]) -> ImmutableMultiset[T] {
     set = set.add(item)
   }
   set
+}
+
+///|
+pub fn from_array[T : Eq + Hash](arr : Array[T]) -> ImmutableMultiset[T] {
+  let mut set = ImmutableMultiset::new()
+  for _, item in arr {
+    set = set.add(item)
+  }
+  set
+}
+
+///|
+pub fn from_iter[T : Eq + Hash](iter : Iter[T]) -> ImmutableMultiset[T] {
+  let mut set = ImmutableMultiset::new()
+  for item in iter {
+    set = set.add(item)
+  }
+  set
+}
+
+///|
+pub fn from_iter2[T : Eq + Hash](iter : Iter2[T, Int]) -> ImmutableMultiset[T] {
+  let mut set = ImmutableMultiset::new()
+  for item, times in iter {
+    set = set.add(item, times~)
+  }
+  set
+}
+
+///|
+pub fn from_set[T : Eq + Hash](set : Set[T]) -> ImmutableMultiset[T] {
+  let mut multiset = ImmutableMultiset::new()
+  for item in set {
+    multiset = multiset.add(item)
+  }
+  multiset
 }

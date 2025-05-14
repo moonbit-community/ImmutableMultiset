@@ -1,11 +1,24 @@
 package "bigorangeqwq/ImmuntableMultiSet/lib"
 
+import(
+  "moonbitlang/core/immut/hashmap"
+  "moonbitlang/core/set"
+)
+
 // Values
-fn add[T : Eq + Hash](ImmutableMultiset[T], T) -> ImmutableMultiset[T]
+fn add[T : Eq + Hash](ImmutableMultiset[T], T, times~ : Int = ..) -> ImmutableMultiset[T]
 
 fn contains[T : Eq + Hash](ImmutableMultiset[T], T) -> Bool
 
 fn count[T : Eq + Hash](ImmutableMultiset[T], T) -> Int
+
+fn from_array[T : Eq + Hash](Array[T]) -> ImmutableMultiset[T]
+
+fn from_iter[T : Eq + Hash](Iter[T]) -> ImmutableMultiset[T]
+
+fn from_iter2[T : Eq + Hash](Iter2[T, Int]) -> ImmutableMultiset[T]
+
+fn from_set[T : Eq + Hash](@set.Set[T]) -> ImmutableMultiset[T]
 
 fn intersection[T : Eq + Hash](ImmutableMultiset[T], ImmutableMultiset[T]) -> ImmutableMultiset[T]
 
@@ -22,15 +35,12 @@ fn size[T](ImmutableMultiset[T]) -> Int
 fn union[T : Eq + Hash](ImmutableMultiset[T], ImmutableMultiset[T]) -> ImmutableMultiset[T]
 
 // Types and methods
-type Bucket[T]
-
-pub enum ImmutableMultiset[T] {
-  Empty
-  Bucket(Bucket[T])
-  Singleton(T, Int)
+pub struct ImmutableMultiset[T] {
+  mut map : @hashmap.T[T, Int]
+  mut size : Int
 }
 impl ImmutableMultiset {
-  add[T : Eq + Hash](Self[T], T) -> Self[T]
+  add[T : Eq + Hash](Self[T], T, times~ : Int = ..) -> Self[T]
   contains[T : Eq + Hash](Self[T], T) -> Bool
   count[T : Eq + Hash](Self[T], T) -> Int
   intersection[T : Eq + Hash](Self[T], Self[T]) -> Self[T]
@@ -38,10 +48,12 @@ impl ImmutableMultiset {
   new[T]() -> Self[T]
   op_get[T : Eq + Hash](Self[T], T) -> Int
   remove[T : Eq + Hash](Self[T], T, count~ : Int = ..) -> Self[T]
-  singleton[T](T) -> Self[T]
   size[T](Self[T]) -> Int
   union[T : Eq + Hash](Self[T], Self[T]) -> Self[T]
 }
+impl[T : Eq + Hash] BitAnd for ImmutableMultiset[T]
+impl[T : Eq + Hash] BitOr for ImmutableMultiset[T]
+impl[T : Eq + Hash] Sub for ImmutableMultiset[T]
 
 // Type aliases
 
