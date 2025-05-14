@@ -1,10 +1,11 @@
 ///|
 test "ImmuntableMultiset::new" {
-  let set = ImmutableMultiset::new()
+  let set = new()
   let set2 = set.add(1)
   assert_eq!(set.size(), 0)
   assert_eq!(set2.size(), 1)
 }
+
 
 ///|
 test "ImmuntableMultiset::empty/size" {

@@ -41,6 +41,12 @@ pub fn ImmutableMultiset::new[T]() -> ImmutableMultiset[T] {
   { map: @immut/hashmap.new(), size: 0 }
 }
 
+
+///| Creates a new empty multiset.
+pub fn new[T]() -> ImmutableMultiset[T] {
+  ImmutableMultiset::new()
+}
+
 ///| Returns the number of occurrences of an item in the multiset.
 ///
 /// # Examples
