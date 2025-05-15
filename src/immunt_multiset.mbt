@@ -348,6 +348,17 @@ pub impl[T : Eq + Hash] Sub for ImmutableMultiset[T] with op_sub(
 }
 
 ///|
+/// Compares two multisets for equality. O(n) time complexity.
+/// 
+/// # Examples
+/// ```
+/// test "ImmutableMultiset::eq" {
+///   let set1 = ImmutableMultiset::new().add(1, times=2).add(2)
+///   let set2 = ImmutableMultiset::new().add(1, times=2).add(2)
+///   let set3 = ImmutableMultiset::new().add(1, times=2).add(3)
+///   assert_eq!(set1 == set2, true)
+///   assert_eq!(set1 == set3, false)
+/// }
 pub impl[T : Eq + Hash] Eq for ImmutableMultiset[T] with op_equal(
   self : ImmutableMultiset[T],
   other : ImmutableMultiset[T]

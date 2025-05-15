@@ -230,3 +230,18 @@ test "ImmutableMultiset::intersection" {
   assert_eq!(inter.count(2), 1)
   assert_eq!(inter.count(3), 1)
 }
+
+
+test "ImmutableMultiset::singleton" {
+  let a = ImmutableMultiset::new()
+  let b = a.add(1)
+  let c = a.add(2)
+  assert_not_eq!(b, c)
+}
+
+test "ImmutableMultiset::eq" {
+  let a = ImmutableMultiset::new()
+  let b = a.add(1).add(2)
+  let c = a.add(1).add(2)
+  assert_eq!(b, c)
+}
