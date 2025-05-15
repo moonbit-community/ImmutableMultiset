@@ -1,10 +1,6 @@
 # ImmutableMultiset
 
-# Installation
-
-```bash
-moon add BigOrangeQWQ/immunt_multiset
-```
+[中文文档](./README_zh_CN.md)
 
 # Usage
 
