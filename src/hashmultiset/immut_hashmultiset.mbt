@@ -1,4 +1,4 @@
-///| Immutable multiset (bag) implementation supporting efficient structural sharing.
+///| Immutable hash multiset (bag) implementation supporting efficient structural sharing. 
 /// 
 /// # Examples
 /// ```
