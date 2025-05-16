@@ -15,6 +15,10 @@ fn difference[T : Eq + Hash](ImmutableHashMultiset[T], ImmutableHashMultiset[T])
 
 fn elems[T : Eq + Hash](ImmutableHashMultiset[T]) -> Iter[T]
 
+fn filter[T : Hash + Eq](ImmutableHashMultiset[T], (Int) -> Bool) -> ImmutableHashMultiset[T]
+
+fn filteri[T : Hash + Eq](ImmutableHashMultiset[T], (T, Int) -> Bool) -> ImmutableHashMultiset[T]
+
 fn from_array[T : Eq + Hash](Array[T]) -> ImmutableHashMultiset[T]
 
 fn from_iter[T : Eq + Hash](Iter[T]) -> ImmutableHashMultiset[T]
@@ -28,6 +32,10 @@ fn is_empty[T](ImmutableHashMultiset[T]) -> Bool
 fn iter[T : Eq + Hash](ImmutableHashMultiset[T]) -> Iter[(T, Int)]
 
 fn iter2[T : Eq + Hash](ImmutableHashMultiset[T]) -> Iter2[T, Int]
+
+fn map[T : Hash + Eq](ImmutableHashMultiset[T], (Int) -> Int) -> ImmutableHashMultiset[T]
+
+fn mapi[T : Hash + Eq](ImmutableHashMultiset[T], (T, Int) -> Int) -> ImmutableHashMultiset[T]
 
 fn new[T]() -> ImmutableHashMultiset[T]
 
@@ -58,10 +66,14 @@ impl ImmutableHashMultiset {
   count[T : Eq + Hash](Self[T], T) -> Int
   difference[T : Eq + Hash](Self[T], Self[T]) -> Self[T]
   elems[T : Eq + Hash](Self[T]) -> Iter[T]
+  filter[T : Hash + Eq](Self[T], (Int) -> Bool) -> Self[T]
+  filteri[T : Hash + Eq](Self[T], (T, Int) -> Bool) -> Self[T]
   intersection[T : Eq + Hash](Self[T], Self[T]) -> Self[T]
   is_empty[T](Self[T]) -> Bool
   iter[T : Eq + Hash](Self[T]) -> Iter[(T, Int)]
   iter2[T : Eq + Hash](Self[T]) -> Iter2[T, Int]
+  map[T : Hash + Eq](Self[T], (Int) -> Int) -> Self[T]
+  mapi[T : Hash + Eq](Self[T], (T, Int) -> Int) -> Self[T]
   new[T]() -> Self[T]
   op_get[T : Eq + Hash](Self[T], T) -> Int
   remove[T : Eq + Hash](Self[T], T, times~ : Int = ..) -> Self[T]
@@ -71,6 +83,7 @@ impl ImmutableHashMultiset {
   sum[T : Eq + Hash](Self[T], Self[T]) -> Self[T]
   union[T : Eq + Hash](Self[T], Self[T]) -> Self[T]
 }
+impl[T : Eq + Hash] Add for ImmutableHashMultiset[T]
 impl[T : Eq + Hash] BitAnd for ImmutableHashMultiset[T]
 impl[T : Eq + Hash] BitOr for ImmutableHashMultiset[T]
 impl[T : Eq + Hash] Eq for ImmutableHashMultiset[T]

@@ -349,6 +349,110 @@ pub fn elems[T : Compare](self : ImmutableMultiset[T]) -> Iter[T] {
   self.map.keys().iter()
 }
 
+///| Returns a new multiset where the count of each element is updated by applying `f` to its current count.
+/// Elements are passed to `f` in increasing order according to their type's ordering.
+/// 
+/// # Panics
+/// Panics if `f` returns a non-positive value for any element.
+/// 
+/// # Examples
+/// ```
+/// test "ImmutableMultiset::map" {
+///   let set = ImmutableMultiset::new().add(1, times=2).add(2)
+///   let mapped = set.map(fn(count) { count * 2 })
+///   assert_eq!(mapped.count(1), 4)
+///   assert_eq!(mapped.count(2), 2)
+/// }
+/// ```
+pub fn map[T : Compare](
+  self : ImmutableMultiset[T],
+  f : (Int) -> Int
+) -> ImmutableMultiset[T] {
+  let mut new_set = self
+  for item, count in self.iter2() {
+    new_set = new_set.set(item, times=f(count))
+  }
+  new_set
+}
+
+///| Returns a new multiset where the count of each element is updated by applying `f` to the element and its current count.
+/// Elements are passed to `f` in increasing order according to their type's ordering.
+/// 
+/// # Panics
+/// Panics if `f` returns a non-positive value for any element.
+/// 
+/// # Examples
+/// ```
+/// test "ImmutableMultiset::mapi" {
+///   let set = ImmutableMultiset::new().add(1, times=2).add(2)
+///   let mapped = set.mapi(fn(item, count) { if item == 1 { count + 1 } else { count } })
+///   assert_eq!(mapped.count(1), 3)
+///   assert_eq!(mapped.count(2), 1)
+/// }
+/// ```
+pub fn mapi[T : Compare](
+  self : ImmutableMultiset[T],
+  f : (T, Int) -> Int
+) -> ImmutableMultiset[T] {
+  let mut new_set = self
+  for item, count in self.iter2() {
+    new_set = new_set.set(item, times=f(item, count))
+  }
+  new_set
+}
+
+///| Returns a new multiset containing only elements whose count satisfies the predicate `f`.
+///
+/// # Examples
+/// ```
+/// test "ImmutableMultiset::filter" {
+///   let set = ImmutableMultiset::new().add(1, times=2).add(2)
+///   let filtered = set.filter(fn(count) { count > 1 })
+///   assert_eq!(filtered.count(1), 2)
+///   assert_eq!(filtered.count(2), 0)
+/// }
+/// ```
+pub fn filter[T : Compare](
+  self : ImmutableMultiset[T],
+  f : (Int) -> Bool
+) -> ImmutableMultiset[T] {
+  let mut new_set = self
+  for item, count in self.iter2() {
+    if f(count) {
+      new_set = new_set.set(item, times=count)
+    } else {
+      new_set = new_set.remove(item)
+    }
+  }
+  new_set
+}
+
+///| Returns a new multiset containing only elements for which the predicate `f(item, count)` returns true.
+///
+/// # Examples
+/// ```
+/// test "ImmutableMultiset::filteri" {
+///   let set = ImmutableMultiset::new().add(1, times=2).add(2)
+///   let filtered = set.filteri(fn(item, count) { item == 1 && count > 1 })
+///   assert_eq!(filtered.count(1), 2)
+///   assert_eq!(filtered.count(2), 0)
+/// }
+/// ```
+pub fn filteri[T : Compare](
+  self : ImmutableMultiset[T],
+  f : (T, Int) -> Bool
+) -> ImmutableMultiset[T] {
+  let mut new_set = self
+  for item, count in self.iter2() {
+    if f(item, count) {
+      new_set = new_set.set(item, times=count)
+    } else {
+      new_set = new_set.remove(item)
+    }
+  }
+  new_set
+}
+
 ///| Returns an iterator over (element, count) pairs in the multiset.
 ///
 /// # Examples

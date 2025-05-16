@@ -274,3 +274,41 @@ test "ImmutableMultiset::eq" {
   let c = a.add(1).add(2)
   assert_eq!(b, c)
 }
+
+///|
+test "ImmutableMultiset::map" {
+  let set = ImmutableMultiset::new().add(1, times=2).add(2)
+  let mapped = set.map(fn(count) { count * 2 })
+  assert_eq!(mapped.count(1), 4)
+  assert_eq!(mapped.count(2), 2)
+}
+
+///|
+test "ImmutableMultiset::mapi" {
+  let set = ImmutableMultiset::new().add(1, times=2).add(2)
+  let mapped = set.mapi(fn(item, count) {
+    if item == 1 {
+      count + 1
+    } else {
+      count
+    }
+  })
+  assert_eq!(mapped.count(1), 3)
+  assert_eq!(mapped.count(2), 1)
+}
+
+///|
+test "ImmutableMultiset::filter" {
+  let set = ImmutableMultiset::new().add(1, times=2).add(2)
+  let filtered = set.filter(fn(count) { count > 1 })
+  assert_eq!(filtered.count(1), 2)
+  assert_eq!(filtered.count(2), 0)
+}
+
+///|
+test "ImmutableMultiset::filteri" {
+  let set = ImmutableMultiset::new().add(1, times=2).add(2)
+  let filtered = set.filteri(fn(item, count) { item == 1 && count > 1 })
+  assert_eq!(filtered.count(1), 2)
+  assert_eq!(filtered.count(2), 0)
+}

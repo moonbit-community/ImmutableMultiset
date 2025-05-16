@@ -15,6 +15,10 @@ fn difference[T : Compare](ImmutableMultiset[T], ImmutableMultiset[T]) -> Immuta
 
 fn elems[T : Compare](ImmutableMultiset[T]) -> Iter[T]
 
+fn filter[T : Compare](ImmutableMultiset[T], (Int) -> Bool) -> ImmutableMultiset[T]
+
+fn filteri[T : Compare](ImmutableMultiset[T], (T, Int) -> Bool) -> ImmutableMultiset[T]
+
 fn from_array[T : Compare](Array[T]) -> ImmutableMultiset[T]
 
 fn from_iter[T : Compare](Iter[T]) -> ImmutableMultiset[T]
@@ -28,6 +32,10 @@ fn is_empty[T](ImmutableMultiset[T]) -> Bool
 fn iter[T : Compare](ImmutableMultiset[T]) -> Iter[(T, Int)]
 
 fn iter2[T : Compare](ImmutableMultiset[T]) -> Iter2[T, Int]
+
+fn map[T : Compare](ImmutableMultiset[T], (Int) -> Int) -> ImmutableMultiset[T]
+
+fn mapi[T : Compare](ImmutableMultiset[T], (T, Int) -> Int) -> ImmutableMultiset[T]
 
 fn new[T]() -> ImmutableMultiset[T]
 
@@ -58,10 +66,14 @@ impl ImmutableMultiset {
   count[T : Compare](Self[T], T) -> Int
   difference[T : Compare](Self[T], Self[T]) -> Self[T]
   elems[T : Compare](Self[T]) -> Iter[T]
+  filter[T : Compare](Self[T], (Int) -> Bool) -> Self[T]
+  filteri[T : Compare](Self[T], (T, Int) -> Bool) -> Self[T]
   intersection[T : Compare](Self[T], Self[T]) -> Self[T]
   is_empty[T](Self[T]) -> Bool
   iter[T : Compare](Self[T]) -> Iter[(T, Int)]
   iter2[T : Compare](Self[T]) -> Iter2[T, Int]
+  map[T : Compare](Self[T], (Int) -> Int) -> Self[T]
+  mapi[T : Compare](Self[T], (T, Int) -> Int) -> Self[T]
   new[T]() -> Self[T]
   op_get[T : Compare](Self[T], T) -> Int
   remove[T : Compare](Self[T], T, times~ : Int = ..) -> Self[T]
@@ -71,6 +83,7 @@ impl ImmutableMultiset {
   sum[T : Compare](Self[T], Self[T]) -> Self[T]
   union[T : Compare](Self[T], Self[T]) -> Self[T]
 }
+impl[T : Compare] Add for ImmutableMultiset[T]
 impl[T : Compare] BitAnd for ImmutableMultiset[T]
 impl[T : Compare] BitOr for ImmutableMultiset[T]
 impl[T : Compare] Eq for ImmutableMultiset[T]
