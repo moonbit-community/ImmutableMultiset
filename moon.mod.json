@@ -2,7 +2,7 @@
   "name": "BigOrangeQWQ/immut_hashmultiset",
   "version": "0.1.2",
   "readme": "README.md",
-  "repository": "https://github.com/BigOrangeQWQ/ImmutableMultise",
+  "repository": "https://github.com/BigOrangeQWQ/ImmutableHashMultiset",
   "license": "Apache-2.0",
   "keywords": ["multiset", "data-structure", "immutable"],
   "description": "data structure for immutable multiset",
