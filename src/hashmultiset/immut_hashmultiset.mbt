@@ -10,7 +10,7 @@
 /// }
 /// ```
 pub struct ImmutableHashMultiset[T] {
-  mut map : @immut/hashmap.T[T, Int]
+  map : @immut/hashmap.T[T, Int]
   size : Int
 }
 
@@ -113,7 +113,6 @@ pub fn set[T : Eq + Hash](
   } else {
     self.size - count + times
   }
-  self.map = self.map.add(item, times)
   { map: self.map.add(item, times), size: new_size }
 }
 
@@ -144,6 +143,28 @@ pub fn remove[T : Eq + Hash](
     { map: self.map.add(item, element_count - times), size: self.size - times }
   } else {
     { map: self.map.remove(item), size: self.size - element_count }
+  }
+}
+
+///| Removes all occurrences of an item from the multiset.
+/// 
+/// # Examples
+/// ```
+/// test "ImmutableHashMultiset::remove_all" {
+///  let set = ImmutableHashMultiset::new().add(1, times=3).add(2)
+///  let set2 = set.remove_all(1)
+///  assert_eq!(set2.count(1), 0)
+///  assert_eq!(set2.count(2), 1)
+/// }
+/// ```
+pub fn remove_all[T : Hash + Eq](
+  self : ImmutableHashMultiset[T],
+  item : T
+) -> ImmutableHashMultiset[T] {
+  if self.contains(item) {
+    { map: self.map.remove(item), size: self.size - self.count(item) }
+  } else {
+    self
   }
 }
 
@@ -245,27 +266,27 @@ pub fn difference[T : Eq + Hash](
       if count > other_count {
         new_set = new_set.remove(item, times=other_count)
       } else {
-        new_set = new_set.remove(item, times=-1)
+        new_set = new_set.remove_all(item)
       }
     }
   }
   new_set
 }
 
-///| Returns the union of two multisets. For each item, the sum of counts is taken.
+///| Returns the union of two multisets.  For each item, the sum of counts is taken.
 ///
 /// # Examples
 /// ```
-/// test "ImmutableHashMultiset::union" {
+/// test "ImmutableHashMultiset::sum" {
 ///   let set1 = ImmutableHashMultiset::new().add(1).add(2).add(2)
 ///   let set2 = ImmutableHashMultiset::new().add(2).add(3).add(3)
-///   let result = set1.union(set2)
+///   let result = set1.sum(set2)
 ///   assert_eq!(result.count(1), 1)
 ///   assert_eq!(result.count(2), 3)
 ///   assert_eq!(result.count(3), 2)
 /// }
 /// ```
-pub fn union[T : Eq + Hash](
+pub fn sum[T : Eq + Hash](
   self : ImmutableHashMultiset[T],
   other : ImmutableHashMultiset[T]
 ) -> ImmutableHashMultiset[T] {
@@ -279,6 +300,39 @@ pub fn union[T : Eq + Hash](
     let mut new_set = other
     for item, count in self.iter2() {
       new_set = new_set.add(item, times=count)
+    }
+    new_set
+  }
+  new_set
+}
+
+///| Returns the union of two multisets. For each item, the maximum count is taken.
+///
+/// # Examples
+/// ```
+/// test "ImmutableHashMultiset::union" {
+///   let set1 = ImmutableHashMultiset::new().add(1).add(2).add(2)
+///   let set2 = ImmutableHashMultiset::new().add(2).add(3, times=4).add(3)
+///   let result = set1.union(set2)
+///   assert_eq!(result.count(1), 1)
+///   assert_eq!(result.count(2), 3)
+///   assert_eq!(result.count(3), 5)
+/// }
+/// ```
+pub fn union[T : Eq + Hash](
+  self : ImmutableHashMultiset[T],
+  other : ImmutableHashMultiset[T]
+) -> ImmutableHashMultiset[T] {
+  let new_set = if self.size() > other.size() {
+    let mut new_set = self
+    for item, count in other.iter2() {
+      new_set = new_set.set(item, times=@math.maximum(count, self.count(item)))
+    }
+    new_set
+  } else {
+    let mut new_set = other
+    for item, count in self.iter2() {
+      new_set = new_set.set(item, times=@math.maximum(count, other.count(item)))
     }
     new_set
   }

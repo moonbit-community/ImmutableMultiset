@@ -1,0 +1,77 @@
+package "BigOrangeQWQ/immut_multiset"
+
+import(
+  "moonbitlang/core/immut/sorted_map"
+)
+
+// Values
+fn add[T : Compare](ImmutableMultiset[T], T, times~ : Int = ..) -> ImmutableMultiset[T]
+
+fn contains[T : Compare](ImmutableMultiset[T], T) -> Bool
+
+fn count[T : Compare](ImmutableMultiset[T], T) -> Int
+
+fn difference[T : Compare](ImmutableMultiset[T], ImmutableMultiset[T]) -> ImmutableMultiset[T]
+
+fn elems[T : Compare](ImmutableMultiset[T]) -> Iter[T]
+
+fn from_array[T : Compare](Array[T]) -> ImmutableMultiset[T]
+
+fn from_iter[T : Compare](Iter[T]) -> ImmutableMultiset[T]
+
+fn from_iter2[T : Compare](Iter2[T, Int]) -> ImmutableMultiset[T]
+
+fn intersection[T : Compare](ImmutableMultiset[T], ImmutableMultiset[T]) -> ImmutableMultiset[T]
+
+fn is_empty[T](ImmutableMultiset[T]) -> Bool
+
+fn iter[T : Compare](ImmutableMultiset[T]) -> Iter[(T, Int)]
+
+fn iter2[T : Compare](ImmutableMultiset[T]) -> Iter2[T, Int]
+
+fn new[T]() -> ImmutableMultiset[T]
+
+fn of[T : Compare](FixedArray[T]) -> ImmutableMultiset[T]
+
+fn op_get[T : Compare](ImmutableMultiset[T], T) -> Int
+
+fn remove[T : Compare](ImmutableMultiset[T], T, times~ : Int = ..) -> ImmutableMultiset[T]
+
+fn set[T : Compare](ImmutableMultiset[T], T, times~ : Int = ..) -> ImmutableMultiset[T]
+
+fn size[T](ImmutableMultiset[T]) -> Int
+
+fn union[T : Compare](ImmutableMultiset[T], ImmutableMultiset[T]) -> ImmutableMultiset[T]
+
+// Types and methods
+pub struct ImmutableMultiset[T] {
+  mut map : @sorted_map.T[T, Int]
+  size : Int
+}
+impl ImmutableMultiset {
+  add[T : Compare](Self[T], T, times~ : Int = ..) -> Self[T]
+  contains[T : Compare](Self[T], T) -> Bool
+  count[T : Compare](Self[T], T) -> Int
+  difference[T : Compare](Self[T], Self[T]) -> Self[T]
+  elems[T : Compare](Self[T]) -> Iter[T]
+  intersection[T : Compare](Self[T], Self[T]) -> Self[T]
+  is_empty[T](Self[T]) -> Bool
+  iter[T : Compare](Self[T]) -> Iter[(T, Int)]
+  iter2[T : Compare](Self[T]) -> Iter2[T, Int]
+  new[T]() -> Self[T]
+  op_get[T : Compare](Self[T], T) -> Int
+  remove[T : Compare](Self[T], T, times~ : Int = ..) -> Self[T]
+  set[T : Compare](Self[T], T, times~ : Int = ..) -> Self[T]
+  size[T](Self[T]) -> Int
+  union[T : Compare](Self[T], Self[T]) -> Self[T]
+}
+impl[T : Compare] BitAnd for ImmutableMultiset[T]
+impl[T : Compare] BitOr for ImmutableMultiset[T]
+impl[T : Compare] Eq for ImmutableMultiset[T]
+impl[T : Compare + Show] Show for ImmutableMultiset[T]
+impl[T : Compare] Sub for ImmutableMultiset[T]
+
+// Type aliases
+
+// Traits
+
