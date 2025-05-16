@@ -398,6 +398,13 @@ pub impl[T : Compare] Sub for ImmutableMultiset[T] with op_sub(
   self.difference(other)
 }
 
+pub impl[T : Compare] Add for ImmutableMultiset[T] with op_add(
+  self,
+  other : ImmutableMultiset[T]
+) {
+  self.sum(other)
+}
+
 ///|
 /// Compares two multisets for equality. O(n) time complexity.
 /// 

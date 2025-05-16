@@ -403,6 +403,13 @@ pub impl[T : Eq + Hash] Sub for ImmutableHashMultiset[T] with op_sub(
   self.difference(other)
 }
 
+pub impl[T : Eq + Hash] Add for ImmutableHashMultiset[T] with op_add(
+  self,
+  other : ImmutableHashMultiset[T]
+) {
+  self.sum(other)
+}
+
 ///|
 /// Compares two multisets for equality. O(n) time complexity.
 /// 
