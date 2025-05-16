@@ -6,10 +6,9 @@ test "ImmuntableMultiset::new" {
   assert_eq!(set2.size(), 1)
 }
 
-
 ///|
 test "ImmuntableMultiset::empty/size" {
-  let set = ImmutableMultiset::new()
+  let set = ImmutableHashMultiset::new()
   assert_eq!(set.size(), 0)
   assert_eq!(set.is_empty(), true)
   assert_eq!(set.contains(1), false)
@@ -17,7 +16,7 @@ test "ImmuntableMultiset::empty/size" {
 
 ///|
 test "ImmuntableMultiset::add" {
-  let mut set = ImmutableMultiset::new()
+  let mut set = ImmutableHashMultiset::new()
   set = set.add(1)
   set = set.add(2)
   assert_eq!(set.size(), 2)
@@ -27,7 +26,7 @@ test "ImmuntableMultiset::add" {
 
 ///|
 test "ImmuntableMultiset::add/multiple" {
-  let mut set = ImmutableMultiset::new()
+  let mut set = ImmutableHashMultiset::new()
   set = set.add(1, times=3)
   set = set.add(2, times=2)
   set = set.add(2, times=100)
@@ -38,19 +37,19 @@ test "ImmuntableMultiset::add/multiple" {
 
 ///|
 test "panic ImmuntableMultiset::add/zero" {
-  let _ = ImmutableMultiset::new().add(1, times=0)
+  let _ = ImmutableHashMultiset::new().add(1, times=0)
 
 }
 
 ///|
 test "panic ImmuntableMultiset::add/negative" {
-  let _ = ImmutableMultiset::new().add(1, times=-1)
+  let _ = ImmutableHashMultiset::new().add(1, times=-1)
 
 }
 
 ///|
 test "ImmuntableMultiset::set" {
-  let mut set = ImmutableMultiset::new()
+  let mut set = ImmutableHashMultiset::new()
   set = set.add(1, times=10)
   set = set.set(1, times=2)
   assert_eq!(set.count(1), 2)
@@ -58,19 +57,19 @@ test "ImmuntableMultiset::set" {
 
 ///|
 test "panic ImmuntableMultiset::set/zero" {
-  let _ = ImmutableMultiset::new().set(1, times=0)
+  let _ = ImmutableHashMultiset::new().set(1, times=0)
 
 }
 
 ///|
 test "panic ImmuntableMultiset::set/negative" {
-  let _ = ImmutableMultiset::new().set(1, times=-1)
+  let _ = ImmutableHashMultiset::new().set(1, times=-1)
 
 }
 
 ///|
 test "ImmuntableMultiset::contains" {
-  let set = ImmutableMultiset::new()
+  let set = ImmutableHashMultiset::new()
   let set2 = set.add(1)
   assert_eq!(set.contains(1), false)
   assert_eq!(set2.contains(1), true)
@@ -78,7 +77,7 @@ test "ImmuntableMultiset::contains" {
 
 ///|
 test "ImmuntableMultiset::contains/empty" {
-  let set = ImmutableMultiset::new()
+  let set = ImmutableHashMultiset::new()
   assert_eq!(set.contains(1), false)
 }
 
@@ -94,7 +93,7 @@ test "ImmuntableMultiset::count" {
 
 ///|
 test "ImmuntableMultiset::remove" {
-  let set = ImmutableMultiset::new()
+  let set = ImmutableHashMultiset::new()
   let _ = set.add("test")
   let _ = set.add("testitem")
   let _ = set.remove("testitem")
@@ -104,7 +103,7 @@ test "ImmuntableMultiset::remove" {
 
 ///|
 test "ImmuntableMultiset::remove/multiple" {
-  let mut set = ImmutableMultiset::new()
+  let mut set = ImmutableHashMultiset::new()
   set = set.add("test", times=10)
   set = set.remove("test", times=5)
   assert_eq!(set.count("test"), 5)
@@ -112,13 +111,13 @@ test "ImmuntableMultiset::remove/multiple" {
 
 ///|
 test "panic ImmuntableMultiset::remove/zero" {
-  let _ = ImmutableMultiset::new().remove("test", times=0)
+  let _ = ImmutableHashMultiset::new().remove("test", times=0)
 
 }
 
 ///|
 test "ImmuntableMultiset::remove/negative" {
-  let mut set = ImmutableMultiset::new()
+  let mut set = ImmutableHashMultiset::new()
   set = set.add("test", times=10)
   set = set.remove("test", times=-1)
   assert_eq!(set.count("test"), 0)
@@ -126,9 +125,9 @@ test "ImmuntableMultiset::remove/negative" {
 }
 
 ///|
-test "ImmutableMultiset::union/basic" {
-  let set1 = ImmutableMultiset::new().add(1).add(2).add(2)
-  let set2 = ImmutableMultiset::new().add(2).add(3).add(3)
+test "ImmutableHashMultiset::union/basic" {
+  let set1 = ImmutableHashMultiset::new().add(1).add(2).add(2)
+  let set2 = ImmutableHashMultiset::new().add(2).add(3).add(3)
   let result = set1.union(set2)
   inspect!(result.count(1), content="1")
   inspect!(result.count(2), content="3")
@@ -136,9 +135,9 @@ test "ImmutableMultiset::union/basic" {
 }
 
 ///|
-test "ImmutableMultiset::union/empty" {
-  let empty = ImmutableMultiset::new()
-  let set = ImmutableMultiset::new().add(1).add(2)
+test "ImmutableHashMultiset::union/empty" {
+  let empty = ImmutableHashMultiset::new()
+  let set = ImmutableHashMultiset::new().add(1).add(2)
   let result1 = empty.union(set)
   let result2 = set.union(empty)
   inspect!(result1.count(1), content="1")
@@ -148,18 +147,18 @@ test "ImmutableMultiset::union/empty" {
 }
 
 ///|
-test "ImmutableMultiset::union/same_elements" {
-  let set1 = ImmutableMultiset::new().add(1, times=3).add(2, times=2)
-  let set2 = ImmutableMultiset::new().add(1, times=2).add(2, times=4)
+test "ImmutableHashMultiset::union/same_elements" {
+  let set1 = ImmutableHashMultiset::new().add(1, times=3).add(2, times=2)
+  let set2 = ImmutableHashMultiset::new().add(1, times=2).add(2, times=4)
   let result = set1.union(set2)
   inspect!(result.count(1), content="5")
   inspect!(result.count(2), content="6")
 }
 
 ///|
-test "ImmutableMultiset::difference/basic" {
-  let a = ImmutableMultiset::new().add(1, times=3).add(2, times=2)
-  let b = ImmutableMultiset::new().add(1, times=2).add(3, times=1)
+test "ImmutableHashMultiset::difference/basic" {
+  let a = ImmutableHashMultiset::new().add(1, times=3).add(2, times=2)
+  let b = ImmutableHashMultiset::new().add(1, times=2).add(3, times=1)
   let diff = a.difference(b)
   inspect!(diff.count(1), content="1")
   inspect!(diff.count(2), content="2")
@@ -167,80 +166,87 @@ test "ImmutableMultiset::difference/basic" {
 }
 
 ///|
-test "ImmutableMultiset::difference/empty" {
-  let a = ImmutableMultiset::new()
-  let b = ImmutableMultiset::new().add(1, times=2)
+test "ImmutableHashMultiset::difference/empty" {
+  let a = ImmutableHashMultiset::new()
+  let b = ImmutableHashMultiset::new().add(1, times=2)
   let empty_diff = a - b
   inspect!(empty_diff.size(), content="0")
-  let c = ImmutableMultiset::new().add(1, times=2)
-  let d = ImmutableMultiset::new()
+  let c = ImmutableHashMultiset::new().add(1, times=2)
+  let d = ImmutableHashMultiset::new()
   let full_diff = c - d
   inspect!(full_diff.count(1), content="2")
 }
 
 ///|
-test "ImmutableMultiset::difference/same_counts" {
-  let a = ImmutableMultiset::new().add(1, times=2).add(2, times=2)
-  let b = ImmutableMultiset::new().add(1, times=2).add(2, times=2)
+test "ImmutableHashMultiset::difference/same_counts" {
+  let a = ImmutableHashMultiset::new().add(1, times=2).add(2, times=2)
+  let b = ImmutableHashMultiset::new().add(1, times=2).add(2, times=2)
   let diff = a - b
   inspect!(diff.size(), content="0")
   inspect!(diff.count(1), content="0")
   inspect!(diff.count(2), content="0")
 }
 
-
-test "ImmutableMultiset::of" {
+///|
+test "ImmutableHashMultiset::of" {
   let set = of([1, 2, 2, 3])
   assert_eq!(set.count(1), 1)
   assert_eq!(set.count(2), 2)
   assert_eq!(set.count(3), 1)
 }
 
-test "ImmutableMultiset::iter" {
+///|
+test "ImmutableHashMultiset::iter" {
   let set = of([1, 2, 2, 3])
-
-  assert_eq!(set.iter().to_array(), Array::from_fixed_array([(3, 1), (2, 2), (1, 1)]))
+  assert_eq!(
+    set.iter().to_array(),
+    Array::from_fixed_array([(3, 1), (2, 2), (1, 1)]),
+  )
 }
 
-test "ImmutableMultiset::iter/empty" {
-  let set: ImmutableMultiset[Int] = ImmutableMultiset::new()
+///|
+test "ImmutableHashMultiset::iter/empty" {
+  let set : ImmutableHashMultiset[Int] = ImmutableHashMultiset::new()
   assert_eq!(set.iter().to_array(), Array::from_fixed_array([]))
 }
 
-
-test "ImmutableMultiset::elements" {
+///|
+test "ImmutableHashMultiset::elements" {
   let set = of([1, 2, 2, 3])
-  assert_eq!(set.elems().to_array(), Array::from_fixed_array([3,2,1]))
+  assert_eq!(set.elems().to_array(), Array::from_fixed_array([3, 2, 1]))
 }
 
-test "ImmutableMultiset::intersection" {
-  let a = ImmutableMultiset::new().add(1, times=3).add(2, times=2)
-  let b = ImmutableMultiset::new().add(1, times=2).add(3, times=1)
+///|
+test "ImmutableHashMultiset::intersection" {
+  let a = ImmutableHashMultiset::new().add(1, times=3).add(2, times=2)
+  let b = ImmutableHashMultiset::new().add(1, times=2).add(3, times=1)
   let inter = a.intersection(b)
   assert_eq!(inter.count(1), 2)
   assert_eq!(inter.count(2), 0)
   assert_eq!(inter.count(3), 0)
 }
 
-test "ImmutableMultiset::intersection" {
-  let a = ImmutableMultiset::new().add(1).add(2).add(3)
-  let b = ImmutableMultiset::new().add(2).add(3, times=5555).add(4)
-  let inter = a & b 
+///|
+test "ImmutableHashMultiset::intersection" {
+  let a = ImmutableHashMultiset::new().add(1).add(2).add(3)
+  let b = ImmutableHashMultiset::new().add(2).add(3, times=5555).add(4)
+  let inter = a & b
   assert_eq!(inter.count(1), 0)
   assert_eq!(inter.count(2), 1)
   assert_eq!(inter.count(3), 1)
 }
 
-
-test "ImmutableMultiset::singleton" {
-  let a = ImmutableMultiset::new()
+///|
+test "ImmutableHashMultiset::singleton" {
+  let a = ImmutableHashMultiset::new()
   let b = a.add(1)
   let c = a.add(2)
   assert_not_eq!(b, c)
 }
 
-test "ImmutableMultiset::eq" {
-  let a = ImmutableMultiset::new()
+///|
+test "ImmutableHashMultiset::eq" {
+  let a = ImmutableHashMultiset::new()
   let b = a.add(1).add(2)
   let c = a.add(1).add(2)
   assert_eq!(b, c)
