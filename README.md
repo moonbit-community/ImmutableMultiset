@@ -1,7 +1,5 @@
 # ImmutableMultiset
 
-[中文文档](./README_zh_CN.md)
-
 # Usage
 
 ```moonbit
