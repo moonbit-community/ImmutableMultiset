@@ -1,4 +1,4 @@
-package "BigOrangeQWQ/immut_multiset"
+package "BigOrangeQWQ/immut_hashmultiset"
 
 import(
   "moonbitlang/core/immut/hashmap"
