@@ -2,14 +2,14 @@
 /// 
 /// # Examples
 /// ```
-/// test "ImmutableMultiset::new" {
-///   let set = ImmutableMultiset::new()
+/// test "ImmutableHashMultiset::new" {
+///   let set = ImmutableHashMultiset::new()
 ///   let set2 = set.add(1)
 ///   assert_eq!(set.size(), 0)
 ///   assert_eq!(set2.size(), 1) 
 /// }
 /// ```
-pub struct ImmutableMultiset[T] {
+pub struct ImmutableHashMultiset[T] {
   mut map : @immut/hashmap.T[T, Int]
   size : Int
 }
@@ -18,13 +18,16 @@ pub struct ImmutableMultiset[T] {
 ///
 /// # Examples
 /// ```
-/// test "ImmutableMultiset::contains" {
-///   let set = ImmutableMultiset::new().add(1)
+/// test "ImmutableHashMultiset::contains" {
+///   let set = ImmutableHashMultiset::new().add(1)
 ///   assert_eq!(set.contains(1), true)
 ///   assert_eq!(set.contains(2), false)
 /// }
 /// ```
-pub fn contains[T : Eq + Hash](self : ImmutableMultiset[T], item : T) -> Bool {
+pub fn contains[T : Eq + Hash](
+  self : ImmutableHashMultiset[T],
+  item : T
+) -> Bool {
   self.map.contains(item)
 }
 
@@ -32,32 +35,31 @@ pub fn contains[T : Eq + Hash](self : ImmutableMultiset[T], item : T) -> Bool {
 ///
 /// # Examples
 /// ```
-/// test "ImmutableMultiset::new" {
-///   let set = ImmutableMultiset::new()
+/// test "ImmutableHashMultiset::new" {
+///   let set = ImmutableHashMultiset::new()
 ///   assert_eq!(set.size(), 0)
 /// }
 /// ```
-pub fn ImmutableMultiset::new[T]() -> ImmutableMultiset[T] {
+pub fn ImmutableHashMultiset::new[T]() -> ImmutableHashMultiset[T] {
   { map: @immut/hashmap.new(), size: 0 }
 }
 
-
 ///| Creates a new empty multiset.
-pub fn new[T]() -> ImmutableMultiset[T] {
-  ImmutableMultiset::new()
+pub fn new[T]() -> ImmutableHashMultiset[T] {
+  ImmutableHashMultiset::new()
 }
 
 ///| Returns the number of occurrences of an item in the multiset.
 ///
 /// # Examples
 /// ```
-/// test "ImmutableMultiset::count" {
-///   let set = ImmutableMultiset::new().add("a").add("a")
+/// test "ImmutableHashMultiset::count" {
+///   let set = ImmutableHashMultiset::new().add("a").add("a")
 ///   assert_eq!(set.count("a"), 2)
 ///   assert_eq!(set.count("b"), 0)
 /// }
 /// ```
-pub fn count[T : Eq + Hash](self : ImmutableMultiset[T], item : T) -> Int {
+pub fn count[T : Eq + Hash](self : ImmutableHashMultiset[T], item : T) -> Int {
   self.map.get(item).or_else(fn() { 0 })
 }
 
@@ -68,16 +70,16 @@ pub fn count[T : Eq + Hash](self : ImmutableMultiset[T], item : T) -> Int {
 ///
 /// # Examples
 /// ```
-/// test "ImmutableMultiset::add" {
-///   let set = ImmutableMultiset::new().add(1, times=3).add(2)
+/// test "ImmutableHashMultiset::add" {
+///   let set = ImmutableHashMultiset::new().add(1, times=3).add(2)
 ///   assert_eq!(set.count(1), 3)
 /// }
 /// ```
 pub fn add[T : Eq + Hash](
-  self : ImmutableMultiset[T],
+  self : ImmutableHashMultiset[T],
   item : T,
   times~ : Int = 1
-) -> ImmutableMultiset[T] {
+) -> ImmutableHashMultiset[T] {
   if times < 1 {
     abort("times must be 1 or greater")
   }
@@ -92,16 +94,16 @@ pub fn add[T : Eq + Hash](
 ///
 /// # Examples
 /// ```
-/// test "ImmutableMultiset::set" {
-///   let set = ImmutableMultiset::new().add(1, times=10).set(1, times=2)
+/// test "ImmutableHashMultiset::set" {
+///   let set = ImmutableHashMultiset::new().add(1, times=10).set(1, times=2)
 ///   assert_eq!(set.count(1), 2)
 /// }
 /// ```
 pub fn set[T : Eq + Hash](
-  self : ImmutableMultiset[T],
+  self : ImmutableHashMultiset[T],
   item : T,
   times~ : Int = 1
-) -> ImmutableMultiset[T] {
+) -> ImmutableHashMultiset[T] {
   if times < 1 {
     abort("times must be 1 or greater")
   }
@@ -122,16 +124,16 @@ pub fn set[T : Eq + Hash](
 ///
 /// # Examples
 /// ```
-/// test "ImmutableMultiset::remove" {
-///   let set = ImmutableMultiset::new().add("test", times=10).remove("test", times=5)
+/// test "ImmutableHashMultiset::remove" {
+///   let set = ImmutableHashMultiset::new().add("test", times=10).remove("test", times=5)
 ///   assert_eq!(set.count("test"), 5)
 /// }
 /// ```
 pub fn remove[T : Eq + Hash](
-  self : ImmutableMultiset[T],
+  self : ImmutableHashMultiset[T],
   item : T,
   times~ : Int = 1
-) -> ImmutableMultiset[T] {
+) -> ImmutableHashMultiset[T] {
   if times < -1 || times == 0 {
     abort("times must be -1 or greater zero")
   }
@@ -149,12 +151,12 @@ pub fn remove[T : Eq + Hash](
 ///
 /// # Examples
 /// ```
-/// test "ImmutableMultiset::size" {
-///   let set = ImmutableMultiset::new().add(1, times=3).add(2)
+/// test "ImmutableHashMultiset::size" {
+///   let set = ImmutableHashMultiset::new().add(1, times=3).add(2)
 ///   assert_eq!(set.size(), 4)
 /// }
 /// ```
-pub fn size[T](self : ImmutableMultiset[T]) -> Int {
+pub fn size[T](self : ImmutableHashMultiset[T]) -> Int {
   self.size
 }
 
@@ -162,12 +164,12 @@ pub fn size[T](self : ImmutableMultiset[T]) -> Int {
 ///
 /// # Examples
 /// ```
-/// test "ImmutableMultiset::is_empty" {
-///   let set = ImmutableMultiset::new()
+/// test "ImmutableHashMultiset::is_empty" {
+///   let set = ImmutableHashMultiset::new()
 ///   assert_eq!(set.is_empty(), true)
 /// }
 /// ```
-pub fn is_empty[T](self : ImmutableMultiset[T]) -> Bool {
+pub fn is_empty[T](self : ImmutableHashMultiset[T]) -> Bool {
   self.size == 0
 }
 
@@ -177,9 +179,9 @@ pub fn is_empty[T](self : ImmutableMultiset[T]) -> Bool {
 ///
 /// # Examples
 /// ```
-/// test "ImmutableMultiset::intersection" {
-///   let a = ImmutableMultiset::new().add(1, times=3).add(2, times=2)
-///   let b = ImmutableMultiset::new().add(1, times=2).add(3, times=1)
+/// test "ImmutableHashMultiset::intersection" {
+///   let a = ImmutableHashMultiset::new().add(1, times=3).add(2, times=2)
+///   let b = ImmutableHashMultiset::new().add(1, times=2).add(3, times=1)
 ///   let inter = a.intersection(b)
 ///   assert_eq!(inter.count(1), 2)
 ///   assert_eq!(inter.count(2), 0)
@@ -187,9 +189,9 @@ pub fn is_empty[T](self : ImmutableMultiset[T]) -> Bool {
 /// }
 /// ```
 pub fn intersection[T : Eq + Hash](
-  self : ImmutableMultiset[T],
-  other : ImmutableMultiset[T]
-) -> ImmutableMultiset[T] {
+  self : ImmutableHashMultiset[T],
+  other : ImmutableHashMultiset[T]
+) -> ImmutableHashMultiset[T] {
   let new_set = if self.size() > other.size() {
     let mut new_set = other
     for item, count in other.iter2() {
@@ -223,9 +225,9 @@ pub fn intersection[T : Eq + Hash](
 ///
 /// # Examples
 /// ```
-/// test "ImmutableMultiset::difference" {
-///   let a = ImmutableMultiset::new().add(1, times=3).add(2, times=2)
-///   let b = ImmutableMultiset::new().add(1, times=2).add(3, times=1)
+/// test "ImmutableHashMultiset::difference" {
+///   let a = ImmutableHashMultiset::new().add(1, times=3).add(2, times=2)
+///   let b = ImmutableHashMultiset::new().add(1, times=2).add(3, times=1)
 ///   let diff = a.difference(b)
 ///   assert_eq!(diff.count(1), 1)
 ///   assert_eq!(diff.count(2), 2)
@@ -233,9 +235,9 @@ pub fn intersection[T : Eq + Hash](
 /// }
 /// ```
 pub fn difference[T : Eq + Hash](
-  self : ImmutableMultiset[T],
-  other : ImmutableMultiset[T]
-) -> ImmutableMultiset[T] {
+  self : ImmutableHashMultiset[T],
+  other : ImmutableHashMultiset[T]
+) -> ImmutableHashMultiset[T] {
   let mut new_set = self
   for item, count in self.iter2() {
     let other_count = other.count(item)
@@ -254,9 +256,9 @@ pub fn difference[T : Eq + Hash](
 ///
 /// # Examples
 /// ```
-/// test "ImmutableMultiset::union" {
-///   let set1 = ImmutableMultiset::new().add(1).add(2).add(2)
-///   let set2 = ImmutableMultiset::new().add(2).add(3).add(3)
+/// test "ImmutableHashMultiset::union" {
+///   let set1 = ImmutableHashMultiset::new().add(1).add(2).add(2)
+///   let set2 = ImmutableHashMultiset::new().add(2).add(3).add(3)
 ///   let result = set1.union(set2)
 ///   assert_eq!(result.count(1), 1)
 ///   assert_eq!(result.count(2), 3)
@@ -264,9 +266,9 @@ pub fn difference[T : Eq + Hash](
 /// }
 /// ```
 pub fn union[T : Eq + Hash](
-  self : ImmutableMultiset[T],
-  other : ImmutableMultiset[T]
-) -> ImmutableMultiset[T] {
+  self : ImmutableHashMultiset[T],
+  other : ImmutableHashMultiset[T]
+) -> ImmutableHashMultiset[T] {
   let new_set = if self.size() > other.size() {
     let mut new_set = self
     for item, count in other.iter2() {
@@ -287,14 +289,14 @@ pub fn union[T : Eq + Hash](
 ///
 /// # Examples
 /// ```
-/// test "ImmutableMultiset::elems" {
-///   let set = ImmutableMultiset::new().add(1, times=2).add(2)
+/// test "ImmutableHashMultiset::elems" {
+///   let set = ImmutableHashMultiset::new().add(1, times=2).add(2)
 ///   let elems = set.elems().collect()
 ///   assert!(elems.contains(1))
 ///   assert!(elems.contains(2))
 /// }
 /// ```
-pub fn elems[T : Eq + Hash](self : ImmutableMultiset[T]) -> Iter[T] {
+pub fn elems[T : Eq + Hash](self : ImmutableHashMultiset[T]) -> Iter[T] {
   self.map.keys()
 }
 
@@ -302,47 +304,47 @@ pub fn elems[T : Eq + Hash](self : ImmutableMultiset[T]) -> Iter[T] {
 ///
 /// # Examples
 /// ```
-/// test "ImmutableMultiset::iter" {
-///   let set = ImmutableMultiset::new().add(1, times=2).add(2)
+/// test "ImmutableHashMultiset::iter" {
+///   let set = ImmutableHashMultiset::new().add(1, times=2).add(2)
 ///   for item, count in set.iter() {
 ///      assert!(item == 1 || item == 2)
 ///   }
 /// }
 /// ```
-pub fn iter[T : Eq + Hash](self : ImmutableMultiset[T]) -> Iter[(T, Int)] {
+pub fn iter[T : Eq + Hash](self : ImmutableHashMultiset[T]) -> Iter[(T, Int)] {
   self.map.iter()
 }
 
 ///|
-pub fn iter2[T : Eq + Hash](self : ImmutableMultiset[T]) -> Iter2[T, Int] {
+pub fn iter2[T : Eq + Hash](self : ImmutableHashMultiset[T]) -> Iter2[T, Int] {
   self.map.iter2()
 }
 
 ///|
-pub fn op_get[T : Eq + Hash](self : ImmutableMultiset[T], item : T) -> Int {
+pub fn op_get[T : Eq + Hash](self : ImmutableHashMultiset[T], item : T) -> Int {
   self.count(item)
 }
 
 ///|
-pub impl[T : Eq + Hash] BitOr for ImmutableMultiset[T] with lor(
+pub impl[T : Eq + Hash] BitOr for ImmutableHashMultiset[T] with lor(
   self,
-  other : ImmutableMultiset[T]
+  other : ImmutableHashMultiset[T]
 ) {
   self.union(other)
 }
 
 ///|
-pub impl[T : Eq + Hash] BitAnd for ImmutableMultiset[T] with land(
+pub impl[T : Eq + Hash] BitAnd for ImmutableHashMultiset[T] with land(
   self,
-  other : ImmutableMultiset[T]
+  other : ImmutableHashMultiset[T]
 ) {
   self.intersection(other)
 }
 
 ///|
-pub impl[T : Eq + Hash] Sub for ImmutableMultiset[T] with op_sub(
+pub impl[T : Eq + Hash] Sub for ImmutableHashMultiset[T] with op_sub(
   self,
-  other : ImmutableMultiset[T]
+  other : ImmutableHashMultiset[T]
 ) {
   self.difference(other)
 }
@@ -352,16 +354,16 @@ pub impl[T : Eq + Hash] Sub for ImmutableMultiset[T] with op_sub(
 /// 
 /// # Examples
 /// ```
-/// test "ImmutableMultiset::eq" {
-///   let set1 = ImmutableMultiset::new().add(1, times=2).add(2)
-///   let set2 = ImmutableMultiset::new().add(1, times=2).add(2)
-///   let set3 = ImmutableMultiset::new().add(1, times=2).add(3)
+/// test "ImmutableHashMultiset::eq" {
+///   let set1 = ImmutableHashMultiset::new().add(1, times=2).add(2)
+///   let set2 = ImmutableHashMultiset::new().add(1, times=2).add(2)
+///   let set3 = ImmutableHashMultiset::new().add(1, times=2).add(3)
 ///   assert_eq!(set1 == set2, true)
 ///   assert_eq!(set1 == set3, false)
 /// }
-pub impl[T : Eq + Hash] Eq for ImmutableMultiset[T] with op_equal(
-  self : ImmutableMultiset[T],
-  other : ImmutableMultiset[T]
+pub impl[T : Eq + Hash] Eq for ImmutableHashMultiset[T] with op_equal(
+  self : ImmutableHashMultiset[T],
+  other : ImmutableHashMultiset[T]
 ) {
   if self.size != other.size {
     return false
@@ -375,49 +377,59 @@ pub impl[T : Eq + Hash] Eq for ImmutableMultiset[T] with op_equal(
   true
 }
 
-pub impl[T : Eq + Hash + Show] Show for ImmutableMultiset[T] with output(self: ImmutableMultiset[T], logger: &Logger) {
-  logger.write_iter(self.iter(), prefix="@ImmutableMultiset.of([", suffix="])")
+///|
+pub impl[T : Eq + Hash + Show] Show for ImmutableHashMultiset[T] with output(
+  self : ImmutableHashMultiset[T],
+  logger : &Logger
+) {
+  logger.write_iter(
+    self.iter(),
+    prefix="@ImmutableHashMultiset.of([",
+    suffix="])",
+  )
 }
 
-///| Converts a FixedArray to an ImmutableMultiset.
+///| Converts a FixedArray to an ImmutableHashMultiset.
 ///
 /// # Examples
 /// ```
-/// test "ImmutableMultiset::of" {
-///   let set = ImmutableMultiset::of([1, 2, 2])
+/// test "ImmutableHashMultiset::of" {
+///   let set = ImmutableHashMultiset::of([1, 2, 2])
 ///   assert_eq!(set.count(1), 1)
 ///   assert_eq!(set.count(2), 2)
 /// }
 /// ```
-pub fn of[T : Eq + Hash](arr : FixedArray[T]) -> ImmutableMultiset[T] {
-  let mut set = ImmutableMultiset::new()
+pub fn of[T : Eq + Hash](arr : FixedArray[T]) -> ImmutableHashMultiset[T] {
+  let mut set = ImmutableHashMultiset::new()
   for _, item in arr {
     set = set.add(item)
   }
   set
 }
 
-///| Converts an Array to an ImmutableMultiset.
-pub fn from_array[T : Eq + Hash](arr : Array[T]) -> ImmutableMultiset[T] {
-  let mut set = ImmutableMultiset::new()
+///| Converts an Array to an ImmutableHashMultiset.
+pub fn from_array[T : Eq + Hash](arr : Array[T]) -> ImmutableHashMultiset[T] {
+  let mut set = ImmutableHashMultiset::new()
   for _, item in arr {
     set = set.add(item)
   }
   set
 }
 
-///| Converts an iterator to an ImmutableMultiset.
-pub fn from_iter[T : Eq + Hash](iter : Iter[T]) -> ImmutableMultiset[T] {
-  let mut set = ImmutableMultiset::new()
+///| Converts an iterator to an ImmutableHashMultiset.
+pub fn from_iter[T : Eq + Hash](iter : Iter[T]) -> ImmutableHashMultiset[T] {
+  let mut set = ImmutableHashMultiset::new()
   for item in iter {
     set = set.add(item)
   }
   set
 }
 
-///| Converts an iterator of (element, count) pairs to an ImmutableMultiset.
-pub fn from_iter2[T : Eq + Hash](iter : Iter2[T, Int]) -> ImmutableMultiset[T] {
-  let mut set = ImmutableMultiset::new()
+///| Converts an iterator of (element, count) pairs to an ImmutableHashMultiset.
+pub fn from_iter2[T : Eq + Hash](
+  iter : Iter2[T, Int]
+) -> ImmutableHashMultiset[T] {
+  let mut set = ImmutableHashMultiset::new()
   for item, times in iter {
     set = set.add(item, times~)
   }

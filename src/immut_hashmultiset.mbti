@@ -1,0 +1,77 @@
+package "BigOrangeQWQ/immut_hashmultiset"
+
+import(
+  "moonbitlang/core/immut/hashmap"
+)
+
+// Values
+fn add[T : Eq + Hash](ImmutableHashMultiset[T], T, times~ : Int = ..) -> ImmutableHashMultiset[T]
+
+fn contains[T : Eq + Hash](ImmutableHashMultiset[T], T) -> Bool
+
+fn count[T : Eq + Hash](ImmutableHashMultiset[T], T) -> Int
+
+fn difference[T : Eq + Hash](ImmutableHashMultiset[T], ImmutableHashMultiset[T]) -> ImmutableHashMultiset[T]
+
+fn elems[T : Eq + Hash](ImmutableHashMultiset[T]) -> Iter[T]
+
+fn from_array[T : Eq + Hash](Array[T]) -> ImmutableHashMultiset[T]
+
+fn from_iter[T : Eq + Hash](Iter[T]) -> ImmutableHashMultiset[T]
+
+fn from_iter2[T : Eq + Hash](Iter2[T, Int]) -> ImmutableHashMultiset[T]
+
+fn intersection[T : Eq + Hash](ImmutableHashMultiset[T], ImmutableHashMultiset[T]) -> ImmutableHashMultiset[T]
+
+fn is_empty[T](ImmutableHashMultiset[T]) -> Bool
+
+fn iter[T : Eq + Hash](ImmutableHashMultiset[T]) -> Iter[(T, Int)]
+
+fn iter2[T : Eq + Hash](ImmutableHashMultiset[T]) -> Iter2[T, Int]
+
+fn new[T]() -> ImmutableHashMultiset[T]
+
+fn of[T : Eq + Hash](FixedArray[T]) -> ImmutableHashMultiset[T]
+
+fn op_get[T : Eq + Hash](ImmutableHashMultiset[T], T) -> Int
+
+fn remove[T : Eq + Hash](ImmutableHashMultiset[T], T, times~ : Int = ..) -> ImmutableHashMultiset[T]
+
+fn set[T : Eq + Hash](ImmutableHashMultiset[T], T, times~ : Int = ..) -> ImmutableHashMultiset[T]
+
+fn size[T](ImmutableHashMultiset[T]) -> Int
+
+fn union[T : Eq + Hash](ImmutableHashMultiset[T], ImmutableHashMultiset[T]) -> ImmutableHashMultiset[T]
+
+// Types and methods
+pub struct ImmutableHashMultiset[T] {
+  mut map : @hashmap.T[T, Int]
+  size : Int
+}
+impl ImmutableHashMultiset {
+  add[T : Eq + Hash](Self[T], T, times~ : Int = ..) -> Self[T]
+  contains[T : Eq + Hash](Self[T], T) -> Bool
+  count[T : Eq + Hash](Self[T], T) -> Int
+  difference[T : Eq + Hash](Self[T], Self[T]) -> Self[T]
+  elems[T : Eq + Hash](Self[T]) -> Iter[T]
+  intersection[T : Eq + Hash](Self[T], Self[T]) -> Self[T]
+  is_empty[T](Self[T]) -> Bool
+  iter[T : Eq + Hash](Self[T]) -> Iter[(T, Int)]
+  iter2[T : Eq + Hash](Self[T]) -> Iter2[T, Int]
+  new[T]() -> Self[T]
+  op_get[T : Eq + Hash](Self[T], T) -> Int
+  remove[T : Eq + Hash](Self[T], T, times~ : Int = ..) -> Self[T]
+  set[T : Eq + Hash](Self[T], T, times~ : Int = ..) -> Self[T]
+  size[T](Self[T]) -> Int
+  union[T : Eq + Hash](Self[T], Self[T]) -> Self[T]
+}
+impl[T : Eq + Hash] BitAnd for ImmutableHashMultiset[T]
+impl[T : Eq + Hash] BitOr for ImmutableHashMultiset[T]
+impl[T : Eq + Hash] Eq for ImmutableHashMultiset[T]
+impl[T : Eq + Hash + Show] Show for ImmutableHashMultiset[T]
+impl[T : Eq + Hash] Sub for ImmutableHashMultiset[T]
+
+// Type aliases
+
+// Traits
+
