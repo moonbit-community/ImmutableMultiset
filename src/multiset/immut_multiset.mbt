@@ -1,7 +1,7 @@
 ///| Immutable multiset (bag) implementation supporting efficient structural sharing.
 /// 
 /// # Examples
-/// ```
+/// ```moonbit
 /// test "ImmutableMultiset::new" {
 ///   let set = ImmutableMultiset::new()
 ///   let set2 = set.add(1)
@@ -17,7 +17,7 @@ pub struct ImmutableMultiset[T] {
 ///| Returns true if the multiset contains the given item.
 ///
 /// # Examples
-/// ```
+/// ```moonbit
 /// test "ImmutableMultiset::contains" {
 ///   let set = ImmutableMultiset::new().add(1)
 ///   assert_eq!(set.contains(1), true)
@@ -31,7 +31,7 @@ pub fn contains[T : Compare](self : ImmutableMultiset[T], item : T) -> Bool {
 ///| Creates a new empty multiset.
 ///
 /// # Examples
-/// ```
+/// ```moonbit
 /// test "ImmutableMultiset::new" {
 ///   let set = ImmutableMultiset::new()
 ///   assert_eq!(set.size(), 0)
@@ -49,7 +49,7 @@ pub fn new[T]() -> ImmutableMultiset[T] {
 ///| Returns the number of occurrences of an item in the multiset.
 ///
 /// # Examples
-/// ```
+/// ```moonbit
 /// test "ImmutableMultiset::count" {
 ///   let set = ImmutableMultiset::new().add("a").add("a")
 ///   assert_eq!(set.count("a"), 2)
@@ -66,7 +66,7 @@ pub fn count[T : Compare](self : ImmutableMultiset[T], item : T) -> Int {
 /// Panics if `times < 1`.
 ///
 /// # Examples
-/// ```
+/// ```moonbit
 /// test "ImmutableMultiset::add" {
 ///   let set = ImmutableMultiset::new().add(1, times=3).add(2)
 ///   assert_eq!(set.count(1), 3)
@@ -90,7 +90,7 @@ pub fn add[T : Compare](
 /// Panics if `times < 1`.
 ///
 /// # Examples
-/// ```
+/// ```moonbit
 /// test "ImmutableMultiset::set" {
 ///   let set = ImmutableMultiset::new().add(1, times=10).set(1, times=2)
 ///   assert_eq!(set.count(1), 2)
@@ -119,7 +119,7 @@ pub fn set[T : Compare](
 /// Panics if `times < 1`.
 ///
 /// # Examples
-/// ```
+/// ```moonbit
 /// test "ImmutableMultiset::remove" {
 ///   let set = ImmutableMultiset::new().add("test", times=10).remove("test", times=5)
 ///   assert_eq!(set.count("test"), 5)
@@ -144,7 +144,7 @@ pub fn remove[T : Compare](
 ///| Removes all occurrences of an item from the multiset.
 /// 
 /// # Examples
-/// ```
+/// ```moonbit
 /// test "ImmutableMultiset::remove_all" {
 ///  let set = ImmutableMultiset::new().add(1, times=3).add(2)
 ///  let set2 = set.remove_all(1)
@@ -166,7 +166,7 @@ pub fn remove_all[T : Compare](
 ///| Returns the total number of elements in the multiset (including duplicates).
 ///
 /// # Examples
-/// ```
+/// ```moonbit
 /// test "ImmutableMultiset::size" {
 ///   let set = ImmutableMultiset::new().add(1, times=3).add(2)
 ///   assert_eq!(set.size(), 4)
@@ -179,7 +179,7 @@ pub fn size[T](self : ImmutableMultiset[T]) -> Int {
 ///| Returns true if the multiset is empty.
 ///
 /// # Examples
-/// ```
+/// ```moonbit
 /// test "ImmutableMultiset::is_empty" {
 ///   let set = ImmutableMultiset::new()
 ///   assert_eq!(set.is_empty(), true)
@@ -194,7 +194,7 @@ pub fn is_empty[T](self : ImmutableMultiset[T]) -> Bool {
 ///| Returns the intersection of two multisets. For each item, the minimum count is taken.
 ///
 /// # Examples
-/// ```
+/// ```moonbit
 /// test "ImmutableMultiset::intersection" {
 ///   let a = ImmutableMultiset::new().add(1, times=3).add(2, times=2)
 ///   let b = ImmutableMultiset::new().add(1, times=2).add(3, times=1)
@@ -240,7 +240,7 @@ pub fn intersection[T : Compare](
 /// If the count in the first multiset is less than or equal to the second, the item is removed.
 ///
 /// # Examples
-/// ```
+/// ```moonbit
 /// test "ImmutableMultiset::difference" {
 ///   let a = ImmutableMultiset::new().add(1, times=3).add(2, times=2)
 ///   let b = ImmutableMultiset::new().add(1, times=2).add(3, times=1)
@@ -271,7 +271,7 @@ pub fn difference[T : Compare](
 ///| Returns the union of two multisets. For each item, the sum of counts is taken.
 ///
 /// # Examples
-/// ```
+/// ```moonbit
 /// test "ImmutableMultiset::sum" {
 ///   let set1 = ImmutableMultiset::new().add(1).add(2).add(2)
 ///   let set2 = ImmutableMultiset::new().add(2).add(3).add(3)
@@ -304,7 +304,7 @@ pub fn sum[T : Compare](
 ///| Returns the union of two multisets. For each item, the maximum count is taken.
 ///
 /// # Examples
-/// ```
+/// ```moonbit
 /// test "ImmutableHashMultiset::union" {
 ///   let set1 = ImmutableHashMultiset::new().add(1).add(2).add(2)
 ///   let set2 = ImmutableHashMultiset::new().add(2).add(3, times=4).add(3)
@@ -337,7 +337,7 @@ pub fn union[T : Compare](
 ///| Returns all distinct elements in the multiset (ignoring counts).
 ///
 /// # Examples
-/// ```
+/// ```moonbit
 /// test "ImmutableMultiset::elems" {
 ///   let set = ImmutableMultiset::new().add(1, times=2).add(2)
 ///   let elems = set.elems().collect()
@@ -356,7 +356,7 @@ pub fn elems[T : Compare](self : ImmutableMultiset[T]) -> Iter[T] {
 /// Panics if `f` returns a non-positive value for any element.
 /// 
 /// # Examples
-/// ```
+/// ```moonbit
 /// test "ImmutableMultiset::map" {
 ///   let set = ImmutableMultiset::new().add(1, times=2).add(2)
 ///   let mapped = set.map(fn(count) { count * 2 })
@@ -382,7 +382,7 @@ pub fn map[T : Compare](
 /// Panics if `f` returns a non-positive value for any element.
 /// 
 /// # Examples
-/// ```
+/// ```moonbit
 /// test "ImmutableMultiset::mapi" {
 ///   let set = ImmutableMultiset::new().add(1, times=2).add(2)
 ///   let mapped = set.mapi(fn(item, count) { if item == 1 { count + 1 } else { count } })
@@ -404,7 +404,7 @@ pub fn mapi[T : Compare](
 ///| Returns a new multiset containing only elements whose count satisfies the predicate `f`.
 ///
 /// # Examples
-/// ```
+/// ```moonbit
 /// test "ImmutableMultiset::filter" {
 ///   let set = ImmutableMultiset::new().add(1, times=2).add(2)
 ///   let filtered = set.filter(fn(count) { count > 1 })
@@ -430,7 +430,7 @@ pub fn filter[T : Compare](
 ///| Returns a new multiset containing only elements for which the predicate `f(item, count)` returns true.
 ///
 /// # Examples
-/// ```
+/// ```moonbit
 /// test "ImmutableMultiset::filteri" {
 ///   let set = ImmutableMultiset::new().add(1, times=2).add(2)
 ///   let filtered = set.filteri(fn(item, count) { item == 1 && count > 1 })
@@ -456,7 +456,7 @@ pub fn filteri[T : Compare](
 ///| Returns an iterator over (element, count) pairs in the multiset.
 ///
 /// # Examples
-/// ```
+/// ```moonbit
 /// test "ImmutableMultiset::iter" {
 ///   let set = ImmutableMultiset::new().add(1, times=2).add(2)
 ///   for item, count in set.iter() {
@@ -514,7 +514,7 @@ pub impl[T : Compare] Add for ImmutableMultiset[T] with op_add(
 /// Compares two multisets for equality. O(n) time complexity.
 /// 
 /// # Examples
-/// ```
+/// ```moonbit
 /// test "ImmutableMultiset::eq" {
 ///   let set1 = ImmutableMultiset::new().add(1, times=2).add(2)
 ///   let set2 = ImmutableMultiset::new().add(1, times=2).add(2)
@@ -549,7 +549,7 @@ pub impl[T : Compare + Show] Show for ImmutableMultiset[T] with output(
 ///| Converts a FixedArray to an ImmutableMultiset.
 ///
 /// # Examples
-/// ```
+/// ```moonbit
 /// test "ImmutableMultiset::of" {
 ///   let set = ImmutableMultiset::of([1, 2, 2])
 ///   assert_eq!(set.count(1), 1)
