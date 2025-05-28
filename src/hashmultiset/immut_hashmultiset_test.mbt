@@ -275,8 +275,9 @@ test "ImmutableHashMultiset::eq" {
   assert_eq!(b, c)
 }
 
+
 ///|
-test "ImmutableHashMultiset::map" {
+test "ImmutableMultiset::map" {
   let set = ImmutableHashMultiset::new().add(1, times=2).add(2)
   let mapped = set.map(fn(count) { count * 2 })
   assert_eq!(mapped.count(1), 4)
@@ -284,7 +285,7 @@ test "ImmutableHashMultiset::map" {
 }
 
 ///|
-test "ImmutableHashMultiset::mapi" {
+test "ImmutableMultiset::mapi" {
   let set = ImmutableHashMultiset::new().add(1, times=2).add(2)
   let mapped = set.mapi(fn(item, count) {
     if item == 1 {
@@ -298,7 +299,7 @@ test "ImmutableHashMultiset::mapi" {
 }
 
 ///|
-test "ImmutableHashMultiset::filter" {
+test "ImmutableMultiset::filter" {
   let set = ImmutableHashMultiset::new().add(1, times=2).add(2)
   let filtered = set.filter(fn(count) { count > 1 })
   assert_eq!(filtered.count(1), 2)
@@ -306,7 +307,7 @@ test "ImmutableHashMultiset::filter" {
 }
 
 ///|
-test "ImmutableHashMultiset::filteri" {
+test "ImmutableMultiset::filteri" {
   let set = ImmutableHashMultiset::new().add(1, times=2).add(2)
   let filtered = set.filteri(fn(item, count) { item == 1 && count > 1 })
   assert_eq!(filtered.count(1), 2)
