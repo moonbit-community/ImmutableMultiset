@@ -1,6 +1,7 @@
 ///| Immutable hash multiset (bag) implementation supporting efficient structural sharing. 
 /// 
-/// # Examples
+/// # Example:
+/// 
 /// ```moonbit
 /// test "ImmutableHashMultiset::new" {
 ///   let set = ImmutableHashMultiset::new()
@@ -16,7 +17,8 @@ pub struct ImmutableHashMultiset[T] {
 
 ///| Returns true if the multiset contains the given item.
 ///
-/// # Examples
+/// # Example:
+/// 
 /// ```moonbit
 /// test "ImmutableHashMultiset::contains" {
 ///   let set = ImmutableHashMultiset::new().add(1)
@@ -33,7 +35,8 @@ pub fn contains[T : Eq + Hash](
 
 ///| Creates a new empty multiset.
 ///
-/// # Examples
+/// # Example:
+/// 
 /// ```moonbit
 /// test "ImmutableHashMultiset::new" {
 ///   let set = ImmutableHashMultiset::new()
@@ -51,7 +54,8 @@ pub fn new[T]() -> ImmutableHashMultiset[T] {
 
 ///| Returns the number of occurrences of an item in the multiset.
 ///
-/// # Examples
+/// # Example:
+/// 
 /// ```moonbit
 /// test "ImmutableHashMultiset::count" {
 ///   let set = ImmutableHashMultiset::new().add("a").add("a")
@@ -68,7 +72,8 @@ pub fn count[T : Eq + Hash](self : ImmutableHashMultiset[T], item : T) -> Int {
 /// # Panics
 /// Panics if `times < 1`.
 ///
-/// # Examples
+/// # Example:
+/// 
 /// ```moonbit
 /// test "ImmutableHashMultiset::add" {
 ///   let set = ImmutableHashMultiset::new().add(1, times=3).add(2)
@@ -92,7 +97,8 @@ pub fn add[T : Eq + Hash](
 /// # Panics
 /// Panics if `times < 1`.
 ///
-/// # Examples
+/// # Example:
+/// 
 /// ```moonbit
 /// test "ImmutableHashMultiset::set" {
 ///   let set = ImmutableHashMultiset::new().add(1, times=10).set(1, times=2)
@@ -121,7 +127,8 @@ pub fn set[T : Eq + Hash](
 /// # Panics
 /// Panics if `times == 0` or `times < -1`.
 ///
-/// # Examples
+/// # Example:
+/// 
 /// ```moonbit
 /// test "ImmutableHashMultiset::remove" {
 ///   let set = ImmutableHashMultiset::new().add("test", times=10).remove("test", times=5)
@@ -148,7 +155,8 @@ pub fn remove[T : Eq + Hash](
 
 ///| Removes all occurrences of an item from the multiset.
 /// 
-/// # Examples
+/// # Example:
+/// 
 /// ```moonbit
 /// test "ImmutableHashMultiset::remove_all" {
 ///  let set = ImmutableHashMultiset::new().add(1, times=3).add(2)
@@ -170,7 +178,8 @@ pub fn remove_all[T : Hash + Eq](
 
 ///| Returns the total number of elements in the multiset (including duplicates).
 ///
-/// # Examples
+/// # Example:
+/// 
 /// ```moonbit
 /// test "ImmutableHashMultiset::size" {
 ///   let set = ImmutableHashMultiset::new().add(1, times=3).add(2)
@@ -183,7 +192,8 @@ pub fn size[T](self : ImmutableHashMultiset[T]) -> Int {
 
 ///| Returns true if the multiset is empty.
 ///
-/// # Examples
+/// # Example:
+/// 
 /// ```moonbit
 /// test "ImmutableHashMultiset::is_empty" {
 ///   let set = ImmutableHashMultiset::new()
@@ -198,7 +208,8 @@ pub fn is_empty[T](self : ImmutableHashMultiset[T]) -> Bool {
 
 ///| Returns the intersection of two multisets. For each item, the minimum count is taken.
 ///
-/// # Examples
+/// # Example:
+/// 
 /// ```moonbit
 /// test "ImmutableHashMultiset::intersection" {
 ///   let a = ImmutableHashMultiset::new().add(1, times=3).add(2, times=2)
@@ -244,7 +255,8 @@ pub fn intersection[T : Eq + Hash](
 ///| Returns the difference of two multisets. For each item, the difference of counts is taken.
 /// If the count in the first multiset is less than or equal to the second, the item is removed.
 ///
-/// # Examples
+/// # Example:
+/// 
 /// ```moonbit
 /// test "ImmutableHashMultiset::difference" {
 ///   let a = ImmutableHashMultiset::new().add(1, times=3).add(2, times=2)
@@ -275,7 +287,8 @@ pub fn difference[T : Eq + Hash](
 
 ///| Returns the union of two multisets.  For each item, the sum of counts is taken.
 ///
-/// # Examples
+/// # Example:
+/// 
 /// ```moonbit
 /// test "ImmutableHashMultiset::sum" {
 ///   let set1 = ImmutableHashMultiset::new().add(1).add(2).add(2)
@@ -308,7 +321,8 @@ pub fn sum[T : Eq + Hash](
 
 ///| Returns the union of two multisets. For each item, the maximum count is taken.
 ///
-/// # Examples
+/// # Example:
+/// 
 /// ```moonbit
 /// test "ImmutableHashMultiset::union" {
 ///   let set1 = ImmutableHashMultiset::new().add(1).add(2).add(2)
@@ -341,7 +355,8 @@ pub fn union[T : Eq + Hash](
 
 ///| Returns all distinct elements in the multiset (ignoring counts).
 ///
-/// # Examples
+/// # Example:
+/// 
 /// ```moonbit
 /// test "ImmutableHashMultiset::elems" {
 ///   let set = ImmutableHashMultiset::new().add(1, times=2).add(2)
@@ -360,7 +375,8 @@ pub fn elems[T : Eq + Hash](self : ImmutableHashMultiset[T]) -> Iter[T] {
 /// # Panics
 /// Panics if `f` returns a non-positive value for any element.
 /// 
-/// # Examples
+/// # Example:
+/// 
 /// ```moonbit
 /// test "ImmutableHashMultiset::map" {
 ///   let set = ImmutableHashMultiset::new().add(1, times=2).add(2)
@@ -386,7 +402,8 @@ pub fn map[T : Hash + Eq](
 /// # Panics
 /// Panics if `f` returns a non-positive value for any element.
 /// 
-/// # Examples
+/// # Example:
+/// 
 /// ```moonbit
 /// test "ImmutableHashMultiset::mapi" {
 ///   let set = ImmutableHashMultiset::new().add(1, times=2).add(2)
@@ -408,7 +425,8 @@ pub fn mapi[T : Hash + Eq](
 
 ///| Returns a new multiset containing only elements whose count satisfies the predicate `f`.
 ///
-/// # Examples
+/// # Example:
+/// 
 /// ```moonbit
 /// test "ImmutableHashMultiset::filter" {
 ///   let set = ImmutableHashMultiset::new().add(1, times=2).add(2)
@@ -434,7 +452,8 @@ pub fn filter[T : Hash + Eq](
 
 ///| Returns a new multiset containing only elements for which the predicate `f(item, count)` returns true.
 ///
-/// # Examples
+/// # Example:
+/// 
 /// ```moonbit
 /// test "ImmutableHashMultiset::filteri" {
 ///   let set = ImmutableHashMultiset::new().add(1, times=2).add(2)
@@ -460,7 +479,8 @@ pub fn filteri[T : Hash + Eq](
 
 ///| Returns an iterator over (element, count) pairs in the multiset.
 ///
-/// # Examples
+/// # Example:
+/// 
 /// ```moonbit
 /// test "ImmutableHashMultiset::iter" {
 ///   let set = ImmutableHashMultiset::new().add(1, times=2).add(2)
@@ -518,7 +538,8 @@ pub impl[T : Eq + Hash] Add for ImmutableHashMultiset[T] with op_add(
 ///|
 /// Compares two multisets for equality. O(n) time complexity.
 /// 
-/// # Examples
+/// # Example:
+/// 
 /// ```moonbit
 /// test "ImmutableHashMultiset::eq" {
 ///   let set1 = ImmutableHashMultiset::new().add(1, times=2).add(2)
@@ -557,7 +578,8 @@ pub impl[T : Eq + Hash + Show] Show for ImmutableHashMultiset[T] with output(
 
 ///| Converts a FixedArray to an ImmutableHashMultiset.
 ///
-/// # Examples
+/// # Example:
+/// 
 /// ```moonbit
 /// test "ImmutableHashMultiset::of" {
 ///   let set = ImmutableHashMultiset::of([1, 2, 2])
