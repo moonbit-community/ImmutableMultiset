@@ -1,3 +1,4 @@
+// Generated using `moon info`, DON'T EDIT IT
 package "BigOrangeQWQ/immut_multiset/multiset"
 
 import(
@@ -5,84 +6,44 @@ import(
 )
 
 // Values
-fn add[T : Compare](ImmutableMultiset[T], T, times~ : Int = ..) -> ImmutableMultiset[T]
+fn[T : Compare] from_array(Array[T]) -> ImmutableMultiset[T]
 
-fn contains[T : Compare](ImmutableMultiset[T], T) -> Bool
+fn[T : Compare] from_iter(Iter[T]) -> ImmutableMultiset[T]
 
-fn count[T : Compare](ImmutableMultiset[T], T) -> Int
+fn[T : Compare] from_iter2(Iter2[T, Int]) -> ImmutableMultiset[T]
 
-fn difference[T : Compare](ImmutableMultiset[T], ImmutableMultiset[T]) -> ImmutableMultiset[T]
+fn[T] new() -> ImmutableMultiset[T]
 
-fn elems[T : Compare](ImmutableMultiset[T]) -> Iter[T]
+fn[T : Compare] of(FixedArray[T]) -> ImmutableMultiset[T]
 
-fn filter[T : Compare](ImmutableMultiset[T], (Int) -> Bool) -> ImmutableMultiset[T]
-
-fn filteri[T : Compare](ImmutableMultiset[T], (T, Int) -> Bool) -> ImmutableMultiset[T]
-
-fn from_array[T : Compare](Array[T]) -> ImmutableMultiset[T]
-
-fn from_iter[T : Compare](Iter[T]) -> ImmutableMultiset[T]
-
-fn from_iter2[T : Compare](Iter2[T, Int]) -> ImmutableMultiset[T]
-
-fn intersection[T : Compare](ImmutableMultiset[T], ImmutableMultiset[T]) -> ImmutableMultiset[T]
-
-fn is_empty[T](ImmutableMultiset[T]) -> Bool
-
-fn iter[T : Compare](ImmutableMultiset[T]) -> Iter[(T, Int)]
-
-fn iter2[T : Compare](ImmutableMultiset[T]) -> Iter2[T, Int]
-
-fn map[T : Compare](ImmutableMultiset[T], (Int) -> Int) -> ImmutableMultiset[T]
-
-fn mapi[T : Compare](ImmutableMultiset[T], (T, Int) -> Int) -> ImmutableMultiset[T]
-
-fn new[T]() -> ImmutableMultiset[T]
-
-fn of[T : Compare](FixedArray[T]) -> ImmutableMultiset[T]
-
-fn op_get[T : Compare](ImmutableMultiset[T], T) -> Int
-
-fn remove[T : Compare](ImmutableMultiset[T], T, times~ : Int = ..) -> ImmutableMultiset[T]
-
-fn remove_all[T : Compare](ImmutableMultiset[T], T) -> ImmutableMultiset[T]
-
-fn set[T : Compare](ImmutableMultiset[T], T, times~ : Int = ..) -> ImmutableMultiset[T]
-
-fn size[T](ImmutableMultiset[T]) -> Int
-
-fn sum[T : Compare](ImmutableMultiset[T], ImmutableMultiset[T]) -> ImmutableMultiset[T]
-
-fn union[T : Compare](ImmutableMultiset[T], ImmutableMultiset[T]) -> ImmutableMultiset[T]
+// Errors
 
 // Types and methods
 pub struct ImmutableMultiset[T] {
   map : @sorted_map.T[T, Int]
   size : Int
 }
-impl ImmutableMultiset {
-  add[T : Compare](Self[T], T, times~ : Int = ..) -> Self[T]
-  contains[T : Compare](Self[T], T) -> Bool
-  count[T : Compare](Self[T], T) -> Int
-  difference[T : Compare](Self[T], Self[T]) -> Self[T]
-  elems[T : Compare](Self[T]) -> Iter[T]
-  filter[T : Compare](Self[T], (Int) -> Bool) -> Self[T]
-  filteri[T : Compare](Self[T], (T, Int) -> Bool) -> Self[T]
-  intersection[T : Compare](Self[T], Self[T]) -> Self[T]
-  is_empty[T](Self[T]) -> Bool
-  iter[T : Compare](Self[T]) -> Iter[(T, Int)]
-  iter2[T : Compare](Self[T]) -> Iter2[T, Int]
-  map[T : Compare](Self[T], (Int) -> Int) -> Self[T]
-  mapi[T : Compare](Self[T], (T, Int) -> Int) -> Self[T]
-  new[T]() -> Self[T]
-  op_get[T : Compare](Self[T], T) -> Int
-  remove[T : Compare](Self[T], T, times~ : Int = ..) -> Self[T]
-  remove_all[T : Compare](Self[T], T) -> Self[T]
-  set[T : Compare](Self[T], T, times~ : Int = ..) -> Self[T]
-  size[T](Self[T]) -> Int
-  sum[T : Compare](Self[T], Self[T]) -> Self[T]
-  union[T : Compare](Self[T], Self[T]) -> Self[T]
-}
+fn[T : Compare] ImmutableMultiset::add(Self[T], T, times? : Int) -> Self[T]
+fn[T : Compare] ImmutableMultiset::contains(Self[T], T) -> Bool
+fn[T : Compare] ImmutableMultiset::count(Self[T], T) -> Int
+fn[T : Compare] ImmutableMultiset::difference(Self[T], Self[T]) -> Self[T]
+fn[T] ImmutableMultiset::elems(Self[T]) -> Iter[T]
+fn[T : Compare] ImmutableMultiset::filter(Self[T], (Int) -> Bool) -> Self[T]
+fn[T : Compare] ImmutableMultiset::filteri(Self[T], (T, Int) -> Bool) -> Self[T]
+fn[T : Compare] ImmutableMultiset::intersection(Self[T], Self[T]) -> Self[T]
+fn[T] ImmutableMultiset::is_empty(Self[T]) -> Bool
+fn[T] ImmutableMultiset::iter(Self[T]) -> Iter[(T, Int)]
+fn[T] ImmutableMultiset::iter2(Self[T]) -> Iter2[T, Int]
+fn[T : Compare] ImmutableMultiset::map(Self[T], (Int) -> Int) -> Self[T]
+fn[T : Compare] ImmutableMultiset::mapi(Self[T], (T, Int) -> Int) -> Self[T]
+fn[T] ImmutableMultiset::new() -> Self[T]
+fn[T : Compare] ImmutableMultiset::op_get(Self[T], T) -> Int
+fn[T : Compare] ImmutableMultiset::remove(Self[T], T, times? : Int) -> Self[T]
+fn[T : Compare] ImmutableMultiset::remove_all(Self[T], T) -> Self[T]
+fn[T : Compare] ImmutableMultiset::set(Self[T], T, times? : Int) -> Self[T]
+fn[T] ImmutableMultiset::size(Self[T]) -> Int
+fn[T : Compare] ImmutableMultiset::sum(Self[T], Self[T]) -> Self[T]
+fn[T : Compare] ImmutableMultiset::union(Self[T], Self[T]) -> Self[T]
 impl[T : Compare] Add for ImmutableMultiset[T]
 impl[T : Compare] BitAnd for ImmutableMultiset[T]
 impl[T : Compare] BitOr for ImmutableMultiset[T]
