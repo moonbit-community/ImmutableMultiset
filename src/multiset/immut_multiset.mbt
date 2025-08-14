@@ -3,13 +3,14 @@
 /// # Example:
 /// 
 /// ```moonbit
-/// test "ImmutableMultiset::new" {
-///   let set = ImmutableMultiset::new()
-///   let set2 = set.add(1)
-///   assert_eq!(set.size(), 0)
-///   assert_eq!(set2.size(), 1) 
-/// }
-/// ```
+test "ImmutableMultiset::new" {
+  let set = ImmutableMultiset::new()
+  assert_eq(set.size(), 0)
+  assert_eq(set.is_empty(), true)
+  assert_eq(set.count(42), 0)
+}
+
+///| ```
 pub struct ImmutableMultiset[T] {
   map : @immut/sorted_map.T[T, Int]
   size : Int
@@ -20,12 +21,13 @@ pub struct ImmutableMultiset[T] {
 /// # Example:
 /// 
 /// ```moonbit
-/// test "ImmutableMultiset::contains" {
-///   let set = ImmutableMultiset::new().add(1)
-///   assert_eq!(set.contains(1), true)
-///   assert_eq!(set.contains(2), false)
-/// }
-/// ```
+test "ImmutableMultiset::contains" {
+  let set = ImmutableMultiset::new().add(1).add(2, times=3)
+  assert_eq(set.contains(1), true)
+  assert_eq(set.contains(2), true)
+}
+
+///| ```
 pub fn[T : Compare] contains(self : ImmutableMultiset[T], item : T) -> Bool {
   self.map.contains(item)
 }
@@ -35,11 +37,12 @@ pub fn[T : Compare] contains(self : ImmutableMultiset[T], item : T) -> Bool {
 /// # Example:
 /// 
 /// ```moonbit
-/// test "ImmutableMultiset::new" {
-///   let set = ImmutableMultiset::new()
-///   assert_eq!(set.size(), 0)
-/// }
-/// ```
+test "ImmutableMultiset::new" {
+  let set : ImmutableMultiset[Int] = ImmutableMultiset::new()
+  assert_eq(set.is_empty(), true)
+}
+
+///| ```
 pub fn[T] ImmutableMultiset::new() -> ImmutableMultiset[T] {
   { map: @immut/sorted_map.new(), size: 0 }
 }
@@ -54,14 +57,15 @@ pub fn[T] new() -> ImmutableMultiset[T] {
 /// # Example:
 /// 
 /// ```moonbit
-/// test "ImmutableMultiset::count" {
-///   let set = ImmutableMultiset::new().add("a").add("a")
-///   assert_eq!(set.count("a"), 2)
-///   assert_eq!(set.count("b"), 0)
-/// }
-/// ```
+test "ImmutableMultiset::count" {
+  let set = ImmutableMultiset::new().add(1).add(2, times=3)
+  assert_eq(set.count(1), 1)
+  assert_eq(set.count(2), 3)
+}
+
+///| ```
 pub fn[T : Compare] count(self : ImmutableMultiset[T], item : T) -> Int {
-  self.map.get(item).or_else(fn() { 0 })
+  self.map.get(item).unwrap_or_else(fn() { 0 })
 }
 
 ///| Adds an item to the multiset. If it already exists, increments the count.
@@ -72,11 +76,12 @@ pub fn[T : Compare] count(self : ImmutableMultiset[T], item : T) -> Int {
 /// # Example:
 /// 
 /// ```moonbit
-/// test "ImmutableMultiset::add" {
-///   let set = ImmutableMultiset::new().add(1, times=3).add(2)
-///   assert_eq!(set.count(1), 3)
-/// }
-/// ```
+test "ImmutableMultiset::add" {
+  let set = ImmutableMultiset::new().add(1).add(2, times=3)
+  assert_eq(set.count(1), 1)
+}
+
+///| ```
 pub fn[T : Compare] add(
   self : ImmutableMultiset[T],
   item : T,
@@ -97,11 +102,12 @@ pub fn[T : Compare] add(
 /// # Example:
 /// 
 /// ```moonbit
-/// test "ImmutableMultiset::set" {
-///   let set = ImmutableMultiset::new().add(1, times=10).set(1, times=2)
-///   assert_eq!(set.count(1), 2)
-/// }
-/// ```
+test "ImmutableMultiset::set" {
+  let set = ImmutableMultiset::new().set(1, times=5)
+  assert_eq(set.count(1), 5)
+}
+
+///| ```
 pub fn[T : Compare] set(
   self : ImmutableMultiset[T],
   item : T,
@@ -127,11 +133,12 @@ pub fn[T : Compare] set(
 /// # Example:
 /// 
 /// ```moonbit
-/// test "ImmutableMultiset::remove" {
-///   let set = ImmutableMultiset::new().add("test", times=10).remove("test", times=5)
-///   assert_eq!(set.count("test"), 5)
-/// }
-/// ```
+test "ImmutableMultiset::remove" {
+  let set = ImmutableMultiset::new().add(1, times=3).remove(1)
+  assert_eq(set.count(1), 2)
+}
+
+///| ```
 pub fn[T : Compare] remove(
   self : ImmutableMultiset[T],
   item : T,
@@ -154,10 +161,10 @@ pub fn[T : Compare] remove(
 /// 
 /// ```moonbit
 /// test "ImmutableMultiset::remove_all" {
-///  let set = ImmutableMultiset::new().add(1, times=3).add(2)
-///  let set2 = set.remove_all(1)
-///  assert_eq!(set2.count(1), 0)
-///  assert_eq!(set2.count(2), 1)
+///   let set = ImmutableMultiset::new().add(1, times=3).add(2, times=2)
+///   let result = set.remove_all(1)
+///   assert_eq(result.count(1), 0)
+///   assert_eq(result.count(2), 2)
 /// }
 /// ```
 pub fn[T : Compare] remove_all(
@@ -177,8 +184,8 @@ pub fn[T : Compare] remove_all(
 /// 
 /// ```moonbit
 /// test "ImmutableMultiset::size" {
-///   let set = ImmutableMultiset::new().add(1, times=3).add(2)
-///   assert_eq!(set.size(), 4)
+///   let set = ImmutableMultiset::new().add(1, times=3).add(2, times=2)
+///   assert_eq(set.size(), 5)
 /// }
 /// ```
 pub fn[T] size(self : ImmutableMultiset[T]) -> Int {
@@ -192,7 +199,7 @@ pub fn[T] size(self : ImmutableMultiset[T]) -> Int {
 /// ```moonbit
 /// test "ImmutableMultiset::is_empty" {
 ///   let set = ImmutableMultiset::new()
-///   assert_eq!(set.is_empty(), true)
+///   assert_eq(set.is_empty(), true)
 /// }
 /// ```
 pub fn[T] is_empty(self : ImmutableMultiset[T]) -> Bool {
@@ -207,12 +214,12 @@ pub fn[T] is_empty(self : ImmutableMultiset[T]) -> Bool {
 /// 
 /// ```moonbit
 /// test "ImmutableMultiset::intersection" {
-///   let a = ImmutableMultiset::new().add(1, times=3).add(2, times=2)
-///   let b = ImmutableMultiset::new().add(1, times=2).add(3, times=1)
-///   let inter = a.intersection(b)
-///   assert_eq!(inter.count(1), 2)
-///   assert_eq!(inter.count(2), 0)
-///   assert_eq!(inter.count(3), 0)
+///   let set1 = ImmutableMultiset::new().add(1, times=2).add(2, times=3)
+///   let set2 = ImmutableMultiset::new().add(1, times=1).add(2, times=2).add(3, times=1)
+///   let result = set1.intersection(set2)
+///   assert_eq(result.count(1), 1)
+///   assert_eq(result.count(2), 2)
+///   assert_eq(result.count(3), 0)
 /// }
 /// ```
 pub fn[T : Compare] intersection(
@@ -224,7 +231,7 @@ pub fn[T : Compare] intersection(
     for item, count in other.iter2() {
       let self_count = self.count(item)
       if self_count > 0 {
-        let min_count = @math.minimum(count, self_count)
+        let min_count = @cmp.minimum(count, self_count)
         new_set = new_set.set(item, times=min_count)
       } else {
         new_set = new_set.remove(item)
@@ -236,7 +243,7 @@ pub fn[T : Compare] intersection(
     for item, count in self.iter2() {
       let other_count = other.count(item)
       if other_count > 0 {
-        let min_count = @math.minimum(count, other_count)
+        let min_count = @cmp.minimum(count, other_count)
         new_set = new_set.set(item, times=min_count)
       } else {
         new_set = new_set.remove(item)
@@ -254,12 +261,12 @@ pub fn[T : Compare] intersection(
 /// 
 /// ```moonbit
 /// test "ImmutableMultiset::difference" {
-///   let a = ImmutableMultiset::new().add(1, times=3).add(2, times=2)
-///   let b = ImmutableMultiset::new().add(1, times=2).add(3, times=1)
-///   let diff = a.difference(b)
-///   assert_eq!(diff.count(1), 1)
-///   assert_eq!(diff.count(2), 2)
-///   assert_eq!(diff.count(3), 0)
+///   let set1 = ImmutableMultiset::new().add(1, times=2).add(2, times=3)
+///   let set2 = ImmutableMultiset::new().add(1, times=1).add(2, times=2).add(3, times=1)
+///   let result = set1.difference(set2)
+///   assert_eq!(result.count(1), 1)
+///   assert_eq!(result.count(2), 1)
+///   assert_eq!(result.count(3), 0)
 /// }
 /// ```
 pub fn[T : Compare] difference(
@@ -286,12 +293,12 @@ pub fn[T : Compare] difference(
 /// 
 /// ```moonbit
 /// test "ImmutableMultiset::sum" {
-///   let set1 = ImmutableMultiset::new().add(1).add(2).add(2)
-///   let set2 = ImmutableMultiset::new().add(2).add(3).add(3)
+///   let set1 = ImmutableMultiset::new().add(1, times=2).add(2, times=3)
+///   let set2 = ImmutableMultiset::new().add(1, times=1).add(2, times=2).add(3, times=1)
 ///   let result = set1.sum(set2)
-///   assert_eq!(result.count(1), 1)
-///   assert_eq!(result.count(2), 3)
-///   assert_eq!(result.count(3), 2)
+///   assert_eq(result.count(1), 3)
+///   assert_eq(result.count(2), 5)
+///   assert_eq(result.count(3), 1)
 /// }
 /// ```
 pub fn[T : Compare] sum(
@@ -319,13 +326,13 @@ pub fn[T : Compare] sum(
 /// # Example:
 /// 
 /// ```moonbit
-/// test "ImmutableHashMultiset::union" {
-///   let set1 = ImmutableHashMultiset::new().add(1).add(2).add(2)
-///   let set2 = ImmutableHashMultiset::new().add(2).add(3, times=4).add(3)
+/// test "ImmutableMultiset::union" {
+///   let set1 = ImmutableMultiset::new().add(1).add(2).add(2)
+///   let set2 = ImmutableMultiset::new().add(2).add(3, times=4).add(3)
 ///   let result = set1.union(set2)
 ///   assert_eq!(result.count(1), 1)
 ///   assert_eq!(result.count(2), 3)
-///   assert_eq!(result.count(3), 5)
+///   assert_eq(result.count(3), 5)
 /// }
 /// ```
 pub fn[T : Compare] union(
@@ -335,13 +342,13 @@ pub fn[T : Compare] union(
   let new_set = if self.size() > other.size() {
     let mut new_set = self
     for item, count in other.iter2() {
-      new_set = new_set.set(item, times=@math.maximum(count, self.count(item)))
+      new_set = new_set.set(item, times=@cmp.maximum(count, self.count(item)))
     }
     new_set
   } else {
     let mut new_set = other
     for item, count in self.iter2() {
-      new_set = new_set.set(item, times=@math.maximum(count, other.count(item)))
+      new_set = new_set.set(item, times=@cmp.maximum(count, other.count(item)))
     }
     new_set
   }
@@ -356,11 +363,11 @@ pub fn[T : Compare] union(
 /// test "ImmutableMultiset::elems" {
 ///   let set = ImmutableMultiset::new().add(1, times=2).add(2)
 ///   let elems = set.elems().collect()
-///   assert!(elems.contains(1))
-///   assert!(elems.contains(2))
+///   assert_eq(elems.contains(1), true)
+///   assert_eq(elems.contains(2), true)
 /// }
 /// ```
-pub fn[T : Compare] elems(self : ImmutableMultiset[T]) -> Iter[T] {
+pub fn[T] elems(self : ImmutableMultiset[T]) -> Iter[T] {
   self.map.keys().iter()
 }
 
@@ -376,8 +383,8 @@ pub fn[T : Compare] elems(self : ImmutableMultiset[T]) -> Iter[T] {
 /// test "ImmutableMultiset::map" {
 ///   let set = ImmutableMultiset::new().add(1, times=2).add(2)
 ///   let mapped = set.map(fn(count) { count * 2 })
-///   assert_eq!(mapped.count(1), 4)
-///   assert_eq!(mapped.count(2), 2)
+///   assert_eq(mapped.count(1), 4)
+///   assert_eq(mapped.count(2), 2)
 /// }
 /// ```
 pub fn[T : Compare] map(
@@ -403,7 +410,7 @@ pub fn[T : Compare] map(
 /// test "ImmutableMultiset::mapi" {
 ///   let set = ImmutableMultiset::new().add(1, times=2).add(2)
 ///   let mapped = set.mapi(fn(item, count) { if item == 1 { count + 1 } else { count } })
-///   assert_eq!(mapped.count(1), 3)
+///   assert_eq(mapped.count(1), 3)
 ///   assert_eq!(mapped.count(2), 1)
 /// }
 /// ```
@@ -480,16 +487,16 @@ pub fn[T : Compare] filteri(
 /// test "ImmutableMultiset::iter" {
 ///   let set = ImmutableMultiset::new().add(1, times=2).add(2)
 ///   for item, count in set.iter() {
-///      assert!(item == 1 || item == 2)
+///      assert_eq!(item == 1 || item == 2, true)
 ///   }
 /// }
 /// ```
-pub fn[T : Compare] iter(self : ImmutableMultiset[T]) -> Iter[(T, Int)] {
+pub fn[T] iter(self : ImmutableMultiset[T]) -> Iter[(T, Int)] {
   self.map.iter()
 }
 
 ///|
-pub fn[T : Compare] iter2(self : ImmutableMultiset[T]) -> Iter2[T, Int] {
+pub fn[T] iter2(self : ImmutableMultiset[T]) -> Iter2[T, Int] {
   self.map.iter2()
 }
 
@@ -564,7 +571,11 @@ pub impl[T : Compare + Show] Show for ImmutableMultiset[T] with output(
   self : ImmutableMultiset[T],
   logger : &Logger,
 ) {
-  logger.write_iter(self.iter(), prefix="@ImmutableMultiset.of([", suffix="])")
+  logger.write_iter(
+    self.iter(),
+    prefix="@ImmutableMultiset.from_array([",
+    suffix="])",
+  )
 }
 
 ///| Converts a FixedArray to an ImmutableMultiset.
@@ -573,7 +584,7 @@ pub impl[T : Compare + Show] Show for ImmutableMultiset[T] with output(
 /// 
 /// ```moonbit
 /// test "ImmutableMultiset::of" {
-///   let set = ImmutableMultiset::of([1, 2, 2])
+///   let set = ImmutableMultiset::new().add(1).add(2).add(2)
 ///   assert_eq!(set.count(1), 1)
 ///   assert_eq!(set.count(2), 2)
 /// }
