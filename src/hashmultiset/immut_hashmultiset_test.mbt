@@ -250,7 +250,7 @@ test "ImmutableHashMultiset::intersection" {
 }
 
 ///|
-test "ImmutableHashMultiset::intersection" {
+test "ImmutableHashMultiset::bitand" {
   let a = ImmutableHashMultiset::new().add(1).add(2).add(3)
   let b = ImmutableHashMultiset::new().add(2).add(3, times=5555).add(4)
   let inter = a & b

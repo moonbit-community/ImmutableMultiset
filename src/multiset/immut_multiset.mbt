@@ -3,7 +3,7 @@
 /// # Example:
 /// 
 /// ```moonbit
-test "ImmutableMultiset::new" {
+test "ImmutableMultiset::new_empty" {
   let set = ImmutableMultiset::new()
   assert_eq(set.size(), 0)
   assert_eq(set.is_empty(), true)
@@ -567,7 +567,7 @@ pub impl[T : Compare] Eq for ImmutableMultiset[T] with equal(
 }
 
 ///|
-pub impl[T : Compare + Show] Show for ImmutableMultiset[T] with output(
+pub impl[T : Show] Show for ImmutableMultiset[T] with output(
   self : ImmutableMultiset[T],
   logger : &Logger,
 ) {

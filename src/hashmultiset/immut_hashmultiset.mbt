@@ -565,7 +565,7 @@ pub impl[T : Eq + Hash] Eq for ImmutableHashMultiset[T] with equal(
 }
 
 ///|
-pub impl[T : Eq + Hash + Show] Show for ImmutableHashMultiset[T] with output(
+pub impl[T : Show] Show for ImmutableHashMultiset[T] with output(
   self : ImmutableHashMultiset[T],
   logger : &Logger,
 ) {
