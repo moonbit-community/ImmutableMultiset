@@ -26,7 +26,7 @@ pub struct ImmutableHashMultiset[T] {
 ///   assert_eq(set.contains(2), false)
 /// }
 /// ```
-pub fn[T : Eq + Hash] contains(
+pub fn[T : Eq + Hash] ImmutableHashMultiset::contains(
   self : ImmutableHashMultiset[T],
   item : T,
 ) -> Bool {
@@ -63,7 +63,7 @@ pub fn[T] new() -> ImmutableHashMultiset[T] {
 ///   assert_eq(set.count("b"), 0)
 /// }
 /// ```
-pub fn[T : Eq + Hash] count(self : ImmutableHashMultiset[T], item : T) -> Int {
+pub fn[T : Eq + Hash] ImmutableHashMultiset::count(self : ImmutableHashMultiset[T], item : T) -> Int {
   self.map.get(item).unwrap_or_else(fn() { 0 })
 }
 
@@ -80,7 +80,7 @@ pub fn[T : Eq + Hash] count(self : ImmutableHashMultiset[T], item : T) -> Int {
 ///   assert_eq(set.count(1), 3)
 /// }
 /// ```
-pub fn[T : Eq + Hash] add(
+pub fn[T : Eq + Hash] ImmutableHashMultiset::add(
   self : ImmutableHashMultiset[T],
   item : T,
   times~ : Int = 1,
@@ -105,7 +105,7 @@ pub fn[T : Eq + Hash] add(
 ///   assert_eq(set.count(1), 2)
 /// }
 /// ```
-pub fn[T : Eq + Hash] set(
+pub fn[T : Eq + Hash] ImmutableHashMultiset::set(
   self : ImmutableHashMultiset[T],
   item : T,
   times~ : Int = 1,
@@ -135,7 +135,7 @@ pub fn[T : Eq + Hash] set(
 ///   assert_eq(set.count("test"), 5)
 /// }
 /// ```
-pub fn[T : Eq + Hash] remove(
+pub fn[T : Eq + Hash] ImmutableHashMultiset::remove(
   self : ImmutableHashMultiset[T],
   item : T,
   times~ : Int = 1,
@@ -165,7 +165,7 @@ pub fn[T : Eq + Hash] remove(
 ///  assert_eq(set2.count(2), 1)
 /// }
 /// ```
-pub fn[T : Hash + Eq] remove_all(
+pub fn[T : Hash + Eq] ImmutableHashMultiset::remove_all(
   self : ImmutableHashMultiset[T],
   item : T,
 ) -> ImmutableHashMultiset[T] {
@@ -186,7 +186,7 @@ pub fn[T : Hash + Eq] remove_all(
 ///   assert_eq(set.size(), 4)
 /// }
 /// ```
-pub fn[T] size(self : ImmutableHashMultiset[T]) -> Int {
+pub fn[T] ImmutableHashMultiset::size(self : ImmutableHashMultiset[T]) -> Int {
   self.size
 }
 
@@ -200,7 +200,7 @@ pub fn[T] size(self : ImmutableHashMultiset[T]) -> Int {
 ///   assert_eq(set.is_empty(), true)
 /// }
 /// ```
-pub fn[T] is_empty(self : ImmutableHashMultiset[T]) -> Bool {
+pub fn[T] ImmutableHashMultiset::is_empty(self : ImmutableHashMultiset[T]) -> Bool {
   self.size == 0
 }
 
@@ -220,7 +220,7 @@ pub fn[T] is_empty(self : ImmutableHashMultiset[T]) -> Bool {
 ///   assert_eq!(inter.count(3), 0)
 /// }
 /// ```
-pub fn[T : Eq + Hash] intersection(
+pub fn[T : Eq + Hash] ImmutableHashMultiset::intersection(
   self : ImmutableHashMultiset[T],
   other : ImmutableHashMultiset[T],
 ) -> ImmutableHashMultiset[T] {
@@ -267,7 +267,7 @@ pub fn[T : Eq + Hash] intersection(
 ///   assert_eq!(diff.count(3), 0)
 /// }
 /// ```
-pub fn[T : Eq + Hash] difference(
+pub fn[T : Eq + Hash] ImmutableHashMultiset::difference(
   self : ImmutableHashMultiset[T],
   other : ImmutableHashMultiset[T],
 ) -> ImmutableHashMultiset[T] {
@@ -299,7 +299,7 @@ pub fn[T : Eq + Hash] difference(
 ///   assert_eq!(result.count(3), 2)
 /// }
 /// ```
-pub fn[T : Eq + Hash] sum(
+pub fn[T : Eq + Hash] ImmutableHashMultiset::sum(
   self : ImmutableHashMultiset[T],
   other : ImmutableHashMultiset[T],
 ) -> ImmutableHashMultiset[T] {
@@ -333,7 +333,7 @@ pub fn[T : Eq + Hash] sum(
 ///   assert_eq!(result.count(3), 5)
 /// }
 /// ```
-pub fn[T : Eq + Hash] union(
+pub fn[T : Eq + Hash] ImmutableHashMultiset::union(
   self : ImmutableHashMultiset[T],
   other : ImmutableHashMultiset[T],
 ) -> ImmutableHashMultiset[T] {
@@ -365,7 +365,7 @@ pub fn[T : Eq + Hash] union(
 ///   assert_eq!(elems.contains(2), true)
 /// }
 /// ```
-pub fn[T] elems(self : ImmutableHashMultiset[T]) -> Iter[T] {
+pub fn[T] ImmutableHashMultiset::elems(self : ImmutableHashMultiset[T]) -> Iter[T] {
   self.map.keys()
 }
 
@@ -385,7 +385,7 @@ pub fn[T] elems(self : ImmutableHashMultiset[T]) -> Iter[T] {
 ///   assert_eq!(mapped.count(2), 2)
 /// }
 /// ```
-pub fn[T : Hash + Eq] map(
+pub fn[T : Hash + Eq] ImmutableHashMultiset::map(
   self : ImmutableHashMultiset[T],
   f : (Int) -> Int,
 ) -> ImmutableHashMultiset[T] {
@@ -412,7 +412,7 @@ pub fn[T : Hash + Eq] map(
 ///   assert_eq!(mapped.count(2), 1)
 /// }
 /// ```
-pub fn[T : Hash + Eq] mapi(
+pub fn[T : Hash + Eq] ImmutableHashMultiset::mapi(
   self : ImmutableHashMultiset[T],
   f : (T, Int) -> Int,
 ) -> ImmutableHashMultiset[T] {
@@ -435,7 +435,7 @@ pub fn[T : Hash + Eq] mapi(
 ///   assert_eq!(filtered.count(2), 0)
 /// }
 /// ```
-pub fn[T : Hash + Eq] filter(
+pub fn[T : Hash + Eq] ImmutableHashMultiset::filter(
   self : ImmutableHashMultiset[T],
   f : (Int) -> Bool,
 ) -> ImmutableHashMultiset[T] {
@@ -462,7 +462,7 @@ pub fn[T : Hash + Eq] filter(
 ///   assert_eq!(filtered.count(2), 0)
 /// }
 /// ```
-pub fn[T : Hash + Eq] filteri(
+pub fn[T : Hash + Eq] ImmutableHashMultiset::filteri(
   self : ImmutableHashMultiset[T],
   f : (T, Int) -> Bool,
 ) -> ImmutableHashMultiset[T] {
@@ -489,17 +489,17 @@ pub fn[T : Hash + Eq] filteri(
 ///   }
 /// }
 /// ```
-pub fn[T] iter(self : ImmutableHashMultiset[T]) -> Iter[(T, Int)] {
+pub fn[T] ImmutableHashMultiset::iter(self : ImmutableHashMultiset[T]) -> Iter[(T, Int)] {
   self.map.iter()
 }
 
 ///|
-pub fn[T] iter2(self : ImmutableHashMultiset[T]) -> Iter2[T, Int] {
+pub fn[T] ImmutableHashMultiset::iter2(self : ImmutableHashMultiset[T]) -> Iter2[T, Int] {
   self.map.iter2()
 }
 
 ///|
-pub fn[T : Eq + Hash] op_get(self : ImmutableHashMultiset[T], item : T) -> Int {
+pub fn[T : Eq + Hash] ImmutableHashMultiset::op_get(self : ImmutableHashMultiset[T], item : T) -> Int {
   self.count(item)
 }
 
