@@ -28,7 +28,7 @@ test "ImmutableMultiset::contains" {
 }
 
 ///| ```
-pub fn[T : Compare] contains(self : ImmutableMultiset[T], item : T) -> Bool {
+pub fn[T : Compare] ImmutableMultiset::contains(self : ImmutableMultiset[T], item : T) -> Bool {
   self.map.contains(item)
 }
 
@@ -64,7 +64,7 @@ test "ImmutableMultiset::count" {
 }
 
 ///| ```
-pub fn[T : Compare] count(self : ImmutableMultiset[T], item : T) -> Int {
+pub fn[T : Compare] ImmutableMultiset::count(self : ImmutableMultiset[T], item : T) -> Int {
   self.map.get(item).unwrap_or_else(fn() { 0 })
 }
 
@@ -82,7 +82,7 @@ test "ImmutableMultiset::add" {
 }
 
 ///| ```
-pub fn[T : Compare] add(
+pub fn[T : Compare] ImmutableMultiset::add(
   self : ImmutableMultiset[T],
   item : T,
   times~ : Int = 1,
@@ -108,7 +108,7 @@ test "ImmutableMultiset::set" {
 }
 
 ///| ```
-pub fn[T : Compare] set(
+pub fn[T : Compare] ImmutableMultiset::set(
   self : ImmutableMultiset[T],
   item : T,
   times~ : Int = 1,
@@ -139,7 +139,7 @@ test "ImmutableMultiset::remove" {
 }
 
 ///| ```
-pub fn[T : Compare] remove(
+pub fn[T : Compare] ImmutableMultiset::remove(
   self : ImmutableMultiset[T],
   item : T,
   times~ : Int = 1,
@@ -167,7 +167,7 @@ pub fn[T : Compare] remove(
 ///   assert_eq(result.count(2), 2)
 /// }
 /// ```
-pub fn[T : Compare] remove_all(
+pub fn[T : Compare] ImmutableMultiset::remove_all(
   self : ImmutableMultiset[T],
   item : T,
 ) -> ImmutableMultiset[T] {
@@ -188,7 +188,7 @@ pub fn[T : Compare] remove_all(
 ///   assert_eq(set.size(), 5)
 /// }
 /// ```
-pub fn[T] size(self : ImmutableMultiset[T]) -> Int {
+pub fn[T] ImmutableMultiset::size(self : ImmutableMultiset[T]) -> Int {
   self.size
 }
 
@@ -202,7 +202,7 @@ pub fn[T] size(self : ImmutableMultiset[T]) -> Int {
 ///   assert_eq(set.is_empty(), true)
 /// }
 /// ```
-pub fn[T] is_empty(self : ImmutableMultiset[T]) -> Bool {
+pub fn[T] ImmutableMultiset::is_empty(self : ImmutableMultiset[T]) -> Bool {
   self.size == 0
 }
 
@@ -222,7 +222,7 @@ pub fn[T] is_empty(self : ImmutableMultiset[T]) -> Bool {
 ///   assert_eq(result.count(3), 0)
 /// }
 /// ```
-pub fn[T : Compare] intersection(
+pub fn[T : Compare] ImmutableMultiset::intersection(
   self : ImmutableMultiset[T],
   other : ImmutableMultiset[T],
 ) -> ImmutableMultiset[T] {
@@ -269,7 +269,7 @@ pub fn[T : Compare] intersection(
 ///   assert_eq!(result.count(3), 0)
 /// }
 /// ```
-pub fn[T : Compare] difference(
+pub fn[T : Compare] ImmutableMultiset::difference(
   self : ImmutableMultiset[T],
   other : ImmutableMultiset[T],
 ) -> ImmutableMultiset[T] {
@@ -301,7 +301,7 @@ pub fn[T : Compare] difference(
 ///   assert_eq(result.count(3), 1)
 /// }
 /// ```
-pub fn[T : Compare] sum(
+pub fn[T : Compare] ImmutableMultiset::sum(
   self : ImmutableMultiset[T],
   other : ImmutableMultiset[T],
 ) -> ImmutableMultiset[T] {
@@ -335,7 +335,7 @@ pub fn[T : Compare] sum(
 ///   assert_eq(result.count(3), 5)
 /// }
 /// ```
-pub fn[T : Compare] union(
+pub fn[T : Compare] ImmutableMultiset::union(
   self : ImmutableMultiset[T],
   other : ImmutableMultiset[T],
 ) -> ImmutableMultiset[T] {
@@ -367,7 +367,7 @@ pub fn[T : Compare] union(
 ///   assert_eq(elems.contains(2), true)
 /// }
 /// ```
-pub fn[T] elems(self : ImmutableMultiset[T]) -> Iter[T] {
+pub fn[T] ImmutableMultiset::elems(self : ImmutableMultiset[T]) -> Iter[T] {
   self.map.keys_as_iter()
 }
 
@@ -387,7 +387,7 @@ pub fn[T] elems(self : ImmutableMultiset[T]) -> Iter[T] {
 ///   assert_eq(mapped.count(2), 2)
 /// }
 /// ```
-pub fn[T : Compare] map(
+pub fn[T : Compare] ImmutableMultiset::map(
   self : ImmutableMultiset[T],
   f : (Int) -> Int,
 ) -> ImmutableMultiset[T] {
@@ -414,7 +414,7 @@ pub fn[T : Compare] map(
 ///   assert_eq!(mapped.count(2), 1)
 /// }
 /// ```
-pub fn[T : Compare] mapi(
+pub fn[T : Compare] ImmutableMultiset::mapi(
   self : ImmutableMultiset[T],
   f : (T, Int) -> Int,
 ) -> ImmutableMultiset[T] {
@@ -437,7 +437,7 @@ pub fn[T : Compare] mapi(
 ///   assert_eq!(filtered.count(2), 0)
 /// }
 /// ```
-pub fn[T : Compare] filter(
+pub fn[T : Compare] ImmutableMultiset::filter(
   self : ImmutableMultiset[T],
   f : (Int) -> Bool,
 ) -> ImmutableMultiset[T] {
@@ -464,7 +464,7 @@ pub fn[T : Compare] filter(
 ///   assert_eq!(filtered.count(2), 0)
 /// }
 /// ```
-pub fn[T : Compare] filteri(
+pub fn[T : Compare] ImmutableMultiset::filteri(
   self : ImmutableMultiset[T],
   f : (T, Int) -> Bool,
 ) -> ImmutableMultiset[T] {
@@ -491,17 +491,17 @@ pub fn[T : Compare] filteri(
 ///   }
 /// }
 /// ```
-pub fn[T] iter(self : ImmutableMultiset[T]) -> Iter[(T, Int)] {
+pub fn[T] ImmutableMultiset::iter(self : ImmutableMultiset[T]) -> Iter[(T, Int)] {
   self.map.iter()
 }
 
 ///|
-pub fn[T] iter2(self : ImmutableMultiset[T]) -> Iter2[T, Int] {
+pub fn[T] ImmutableMultiset::iter2(self : ImmutableMultiset[T]) -> Iter2[T, Int] {
   self.map.iter2()
 }
 
 ///|
-pub fn[T : Compare] op_get(self : ImmutableMultiset[T], item : T) -> Int {
+pub fn[T : Compare] ImmutableMultiset::op_get(self : ImmutableMultiset[T], item : T) -> Int {
   self.count(item)
 }
 
