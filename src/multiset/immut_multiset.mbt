@@ -12,7 +12,7 @@ test "ImmutableMultiset::new" {
 
 ///| ```
 pub struct ImmutableMultiset[T] {
-  map : @immut/sorted_map.T[T, Int]
+  map : @sorted_map.SortedMap[T, Int]
   size : Int
 }
 
@@ -44,7 +44,7 @@ test "ImmutableMultiset::new" {
 
 ///| ```
 pub fn[T] ImmutableMultiset::new() -> ImmutableMultiset[T] {
-  { map: @immut/sorted_map.new(), size: 0 }
+  { map: @sorted_map.new(), size: 0 }
 }
 
 ///| Creates a new empty multiset.
@@ -368,7 +368,7 @@ pub fn[T : Compare] union(
 /// }
 /// ```
 pub fn[T] elems(self : ImmutableMultiset[T]) -> Iter[T] {
-  self.map.keys().iter()
+  self.map.keys_as_iter()
 }
 
 ///| Returns a new multiset where the count of each element is updated by applying `f` to its current count.

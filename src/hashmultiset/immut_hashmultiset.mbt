@@ -11,7 +11,7 @@
 /// }
 /// ```
 pub struct ImmutableHashMultiset[T] {
-  map : @immut/hashmap.T[T, Int]
+  map : @hashmap.HashMap[T, Int]
   size : Int
 }
 
@@ -44,7 +44,7 @@ pub fn[T : Eq + Hash] contains(
 /// }
 /// ```
 pub fn[T] ImmutableHashMultiset::new() -> ImmutableHashMultiset[T] {
-  { map: @immut/hashmap.new(), size: 0 }
+  { map: @hashmap.new(), size: 0 }
 }
 
 ///| Creates a new empty multiset.
