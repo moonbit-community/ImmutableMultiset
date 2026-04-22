@@ -38,13 +38,11 @@ test "ImmuntableHashMultiset::add/multiple" {
 ///|
 test "panic ImmuntableHashMultiset::add/zero" {
   let _ = ImmutableHashMultiset::new().add(1, times=0)
-
 }
 
 ///|
 test "panic ImmuntableHashMultiset::add/negative" {
   let _ = ImmutableHashMultiset::new().add(1, times=-1)
-
 }
 
 ///|
@@ -58,13 +56,11 @@ test "ImmuntableHashMultiset::set" {
 ///|
 test "panic ImmuntableHashMultiset::set/zero" {
   let _ = ImmutableHashMultiset::new().set(1, times=0)
-
 }
 
 ///|
 test "panic ImmuntableHashMultiset::set/negative" {
   let _ = ImmutableHashMultiset::new().set(1, times=-1)
-
 }
 
 ///|
@@ -112,7 +108,6 @@ test "ImmuntableHashMultiset::remove/multiple" {
 ///|
 test "panic ImmuntableHashMultiset::remove/zero" {
   let _ = ImmutableHashMultiset::new().remove("test", times=0)
-
 }
 
 ///|

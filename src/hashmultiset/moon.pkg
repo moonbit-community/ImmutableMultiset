@@ -1,0 +1,8 @@
+import {
+  "moonbitlang/core/cmp",
+  "moonbitlang/core/immut/hashmap",
+}
+
+options(
+  name: "BigOrangeQWQ/immut_multiset/hashmultiset",
+)
