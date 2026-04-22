@@ -1,0 +1,57 @@
+// Generated using `moon info`, DON'T EDIT IT
+package "BigOrangeQWQ/immut_multiset/multiset"
+
+import {
+  "moonbitlang/core/immut/sorted_map",
+}
+
+// Values
+pub fn[T : Compare] from_array(Array[T]) -> ImmutableMultiset[T]
+
+pub fn[T : Compare] from_iter(Iter[T]) -> ImmutableMultiset[T]
+
+pub fn[T : Compare] from_iter2(Iter2[T, Int]) -> ImmutableMultiset[T]
+
+pub fn[T] new() -> ImmutableMultiset[T]
+
+pub fn[T : Compare] of(FixedArray[T]) -> ImmutableMultiset[T]
+
+// Errors
+
+// Types and methods
+pub struct ImmutableMultiset[T] {
+  map : @sorted_map.SortedMap[T, Int]
+  size : Int
+}
+pub fn[T : Compare] ImmutableMultiset::add(Self[T], T, times? : Int) -> Self[T]
+pub fn[T : Compare] ImmutableMultiset::contains(Self[T], T) -> Bool
+pub fn[T : Compare] ImmutableMultiset::count(Self[T], T) -> Int
+pub fn[T : Compare] ImmutableMultiset::difference(Self[T], Self[T]) -> Self[T]
+pub fn[T] ImmutableMultiset::elems(Self[T]) -> Iter[T]
+pub fn[T : Compare] ImmutableMultiset::filter(Self[T], (Int) -> Bool) -> Self[T]
+pub fn[T : Compare] ImmutableMultiset::filteri(Self[T], (T, Int) -> Bool) -> Self[T]
+pub fn[T : Compare] ImmutableMultiset::intersection(Self[T], Self[T]) -> Self[T]
+pub fn[T] ImmutableMultiset::is_empty(Self[T]) -> Bool
+pub fn[T] ImmutableMultiset::iter(Self[T]) -> Iter[(T, Int)]
+pub fn[T] ImmutableMultiset::iter2(Self[T]) -> Iter2[T, Int]
+pub fn[T : Compare] ImmutableMultiset::map(Self[T], (Int) -> Int) -> Self[T]
+pub fn[T : Compare] ImmutableMultiset::mapi(Self[T], (T, Int) -> Int) -> Self[T]
+pub fn[T] ImmutableMultiset::new() -> Self[T]
+pub fn[T : Compare] ImmutableMultiset::op_get(Self[T], T) -> Int
+pub fn[T : Compare] ImmutableMultiset::remove(Self[T], T, times? : Int) -> Self[T]
+pub fn[T : Compare] ImmutableMultiset::remove_all(Self[T], T) -> Self[T]
+pub fn[T : Compare] ImmutableMultiset::set(Self[T], T, times? : Int) -> Self[T]
+pub fn[T] ImmutableMultiset::size(Self[T]) -> Int
+pub fn[T : Compare] ImmutableMultiset::sum(Self[T], Self[T]) -> Self[T]
+pub fn[T : Compare] ImmutableMultiset::union(Self[T], Self[T]) -> Self[T]
+pub impl[T : Compare] Add for ImmutableMultiset[T]
+pub impl[T : Compare] BitAnd for ImmutableMultiset[T]
+pub impl[T : Compare] BitOr for ImmutableMultiset[T]
+pub impl[T : Compare] Eq for ImmutableMultiset[T]
+pub impl[T : Show] Show for ImmutableMultiset[T]
+pub impl[T : Compare] Sub for ImmutableMultiset[T]
+
+// Type aliases
+
+// Traits
+
