@@ -216,10 +216,9 @@ test "ImmutableHashMultiset::of" {
 ///|
 test "ImmutableHashMultiset::iter" {
   let set = of([1, 2, 2, 3])
-  assert_eq(
-    set.iter().to_array(),
-    Array::from_fixed_array([(3, 1), (2, 2), (1, 1)]),
-  )
+  let entries = set.iter().to_array()
+  entries.sort()
+  assert_eq(entries, Array::from_fixed_array([(1, 1), (2, 2), (3, 1)]))
 }
 
 ///|
@@ -231,7 +230,9 @@ test "ImmutableHashMultiset::iter/empty" {
 ///|
 test "ImmutableHashMultiset::elements" {
   let set = of([1, 2, 2, 3])
-  assert_eq(set.elems().to_array(), Array::from_fixed_array([3, 2, 1]))
+  let elems = set.elems().to_array()
+  elems.sort()
+  assert_eq(elems, Array::from_fixed_array([1, 2, 3]))
 }
 
 ///|
