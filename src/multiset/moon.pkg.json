@@ -1,3 +1,7 @@
 {
-    "name": "BigOrangeQWQ/immut_multiset/multiset"
+  "name": "BigOrangeQWQ/immut_multiset/multiset",
+  "import": [
+    "moonbitlang/core/cmp",
+    "moonbitlang/core/immut/sorted_map"
+  ]
 }
