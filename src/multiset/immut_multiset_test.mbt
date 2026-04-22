@@ -38,13 +38,11 @@ test "ImmuntableMultiset::add/multiple" {
 ///|
 test "panic ImmuntableMultiset::add/zero" {
   let _ = ImmutableMultiset::new().add(1, times=0)
-
 }
 
 ///|
 test "panic ImmuntableMultiset::add/negative" {
   let _ = ImmutableMultiset::new().add(1, times=-1)
-
 }
 
 ///|
@@ -58,13 +56,11 @@ test "ImmuntableMultiset::set" {
 ///|
 test "panic ImmuntableMultiset::set/zero" {
   let _ = ImmutableMultiset::new().set(1, times=0)
-
 }
 
 ///|
 test "panic ImmuntableMultiset::set/negative" {
   let _ = ImmutableMultiset::new().set(1, times=-1)
-
 }
 
 ///|
@@ -112,7 +108,6 @@ test "ImmuntableMultiset::remove/multiple" {
 ///|
 test "panic ImmuntableMultiset::remove/zero" {
   let _ = ImmutableMultiset::new().remove("test", times=0)
-
 }
 
 ///|
