@@ -520,7 +520,7 @@ pub impl[T : Eq + Hash] BitAnd for ImmutableHashMultiset[T] with land(
 }
 
 ///|
-pub impl[T : Eq + Hash] Sub for ImmutableHashMultiset[T] with op_sub(
+pub impl[T : Eq + Hash] Sub for ImmutableHashMultiset[T] with sub(
   self,
   other : ImmutableHashMultiset[T],
 ) {
@@ -528,7 +528,7 @@ pub impl[T : Eq + Hash] Sub for ImmutableHashMultiset[T] with op_sub(
 }
 
 ///|
-pub impl[T : Eq + Hash] Add for ImmutableHashMultiset[T] with op_add(
+pub impl[T : Eq + Hash] Add for ImmutableHashMultiset[T] with add(
   self,
   other : ImmutableHashMultiset[T],
 ) {
@@ -548,7 +548,7 @@ pub impl[T : Eq + Hash] Add for ImmutableHashMultiset[T] with op_add(
 ///   assert_eq!(set1 == set2, true)
 ///   assert_eq!(set1 == set3, false)
 /// }
-pub impl[T : Eq + Hash] Eq for ImmutableHashMultiset[T] with op_equal(
+pub impl[T : Eq + Hash] Eq for ImmutableHashMultiset[T] with equal(
   self : ImmutableHashMultiset[T],
   other : ImmutableHashMultiset[T],
 ) {

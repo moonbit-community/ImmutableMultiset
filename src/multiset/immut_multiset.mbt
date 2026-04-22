@@ -522,7 +522,7 @@ pub impl[T : Compare] BitAnd for ImmutableMultiset[T] with land(
 }
 
 ///|
-pub impl[T : Compare] Sub for ImmutableMultiset[T] with op_sub(
+pub impl[T : Compare] Sub for ImmutableMultiset[T] with sub(
   self,
   other : ImmutableMultiset[T],
 ) {
@@ -530,7 +530,7 @@ pub impl[T : Compare] Sub for ImmutableMultiset[T] with op_sub(
 }
 
 ///|
-pub impl[T : Compare] Add for ImmutableMultiset[T] with op_add(
+pub impl[T : Compare] Add for ImmutableMultiset[T] with add(
   self,
   other : ImmutableMultiset[T],
 ) {
@@ -550,7 +550,7 @@ pub impl[T : Compare] Add for ImmutableMultiset[T] with op_add(
 ///   assert_eq!(set1 == set2, true)
 ///   assert_eq!(set1 == set3, false)
 /// }
-pub impl[T : Compare] Eq for ImmutableMultiset[T] with op_equal(
+pub impl[T : Compare] Eq for ImmutableMultiset[T] with equal(
   self : ImmutableMultiset[T],
   other : ImmutableMultiset[T],
 ) {
