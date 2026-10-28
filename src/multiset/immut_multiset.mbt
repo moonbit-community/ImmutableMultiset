@@ -14,8 +14,8 @@ test "ImmutableMultiset::new_empty" {
 ///|
 /// ```
 pub struct ImmutableMultiset[T] {
-  map : @sorted_map.SortedMap[T, Int]
-  size : Int
+  map : @sorted_map.SortedMap[T, Int32]
+  size : Int32
 }
 
 ///|
@@ -46,14 +46,14 @@ pub fn[T : Compare] ImmutableMultiset::contains(
 /// 
 /// ```moonbit
 test "ImmutableMultiset::new" {
-  let set : ImmutableMultiset[Int] = ImmutableMultiset::new()
+  let set : ImmutableMultiset[Int32] = ImmutableMultiset::new()
   assert_eq(set.is_empty(), true)
 }
 
 ///|
 /// ```
 pub fn[T] ImmutableMultiset::new() -> ImmutableMultiset[T] {
-  { map: @sorted_map.new(), size: 0 }
+  { map: @sorted_map.new(), size: 0, }
 }
 
 ///|
@@ -76,10 +76,11 @@ test "ImmutableMultiset::count" {
 
 ///|
 /// ```
+#alias("_[_]")
 pub fn[T : Compare] ImmutableMultiset::count(
   self : ImmutableMultiset[T],
   item : T,
-) -> Int {
+) -> Int32 {
   self.map.get(item).unwrap_or_else(fn() { 0 })
 }
 
@@ -102,13 +103,13 @@ test "ImmutableMultiset::add" {
 pub fn[T : Compare] ImmutableMultiset::add(
   self : ImmutableMultiset[T],
   item : T,
-  times? : Int = 1,
+  times~ : Int32 = 1,
 ) -> ImmutableMultiset[T] {
   if times < 1 {
     abort("times must be 1 or greater")
   }
   let element_count = self.count(item)
-  { map: self.map.add(item, element_count + times), size: self.size + times }
+  { map: self.map.add(item, element_count + times), size: self.size + times, }
 }
 
 ///|
@@ -130,7 +131,7 @@ test "ImmutableMultiset::set" {
 pub fn[T : Compare] ImmutableMultiset::set(
   self : ImmutableMultiset[T],
   item : T,
-  times? : Int = 1,
+  times~ : Int32 = 1,
 ) -> ImmutableMultiset[T] {
   if times < 1 {
     abort("times must be 1 or greater")
@@ -141,7 +142,7 @@ pub fn[T : Compare] ImmutableMultiset::set(
   } else {
     self.size - count + times
   }
-  { map: self.map.add(item, times), size: new_size }
+  { map: self.map.add(item, times), size: new_size, }
 }
 
 ///|
@@ -163,16 +164,16 @@ test "ImmutableMultiset::remove" {
 pub fn[T : Compare] ImmutableMultiset::remove(
   self : ImmutableMultiset[T],
   item : T,
-  times? : Int = 1,
+  times~ : Int32 = 1,
 ) -> ImmutableMultiset[T] {
   if times < 1 {
     abort("times must be 1 or greater")
   }
   let element_count = self.count(item)
   if element_count > times {
-    { map: self.map.add(item, element_count - times), size: self.size - times }
+    { map: self.map.add(item, element_count - times), size: self.size - times, }
   } else {
-    { map: self.map.remove(item), size: self.size - element_count }
+    { map: self.map.remove(item), size: self.size - element_count, }
   }
 }
 
@@ -194,7 +195,7 @@ pub fn[T : Compare] ImmutableMultiset::remove_all(
   item : T,
 ) -> ImmutableMultiset[T] {
   if self.contains(item) {
-    { map: self.map.remove(item), size: self.size - self.count(item) }
+    { map: self.map.remove(item), size: self.size - self.count(item), }
   } else {
     self
   }
@@ -211,7 +212,7 @@ pub fn[T : Compare] ImmutableMultiset::remove_all(
 ///   assert_eq(set.size(), 5)
 /// }
 /// ```
-pub fn[T] ImmutableMultiset::size(self : ImmutableMultiset[T]) -> Int {
+pub fn[T] ImmutableMultiset::size(self : ImmutableMultiset[T]) -> Int32 {
   self.size
 }
 
@@ -428,7 +429,7 @@ pub fn[T] ImmutableMultiset::elems(self : ImmutableMultiset[T]) -> Iter[T] {
 /// ```
 pub fn[T : Compare] ImmutableMultiset::map(
   self : ImmutableMultiset[T],
-  f : (Int) -> Int,
+  f : (Int32) -> Int32,
 ) -> ImmutableMultiset[T] {
   let mut new_set = self
   for item, count in self.iter2() {
@@ -462,7 +463,7 @@ pub fn[T : Compare] ImmutableMultiset::map(
 /// ```
 pub fn[T : Compare] ImmutableMultiset::mapi(
   self : ImmutableMultiset[T],
-  f : (T, Int) -> Int,
+  f : (T, Int32) -> Int32,
 ) -> ImmutableMultiset[T] {
   let mut new_set = self
   for item, count in self.iter2() {
@@ -486,7 +487,7 @@ pub fn[T : Compare] ImmutableMultiset::mapi(
 /// ```
 pub fn[T : Compare] ImmutableMultiset::filter(
   self : ImmutableMultiset[T],
-  f : (Int) -> Bool,
+  f : (Int32) -> Bool,
 ) -> ImmutableMultiset[T] {
   let mut new_set = self
   for item, count in self.iter2() {
@@ -514,7 +515,7 @@ pub fn[T : Compare] ImmutableMultiset::filter(
 /// ```
 pub fn[T : Compare] ImmutableMultiset::filteri(
   self : ImmutableMultiset[T],
-  f : (T, Int) -> Bool,
+  f : (T, Int32) -> Bool,
 ) -> ImmutableMultiset[T] {
   let mut new_set = self
   for item, count in self.iter2() {
@@ -542,27 +543,19 @@ pub fn[T : Compare] ImmutableMultiset::filteri(
 /// ```
 pub fn[T] ImmutableMultiset::iter(
   self : ImmutableMultiset[T],
-) -> Iter[(T, Int)] {
+) -> Iter[(T, Int32)] {
   self.map.iter()
 }
 
 ///|
 pub fn[T] ImmutableMultiset::iter2(
   self : ImmutableMultiset[T],
-) -> Iter2[T, Int] {
+) -> Iter2[T, Int32] {
   self.map.iter2()
 }
 
 ///|
-pub fn[T : Compare] ImmutableMultiset::op_get(
-  self : ImmutableMultiset[T],
-  item : T,
-) -> Int {
-  self.count(item)
-}
-
-///|
-pub impl[T : Compare] BitOr for ImmutableMultiset[T] with lor(
+pub impl[T : Compare] BitOr for ImmutableMultiset[T] with fn lor(
   self,
   other : ImmutableMultiset[T],
 ) {
@@ -570,7 +563,7 @@ pub impl[T : Compare] BitOr for ImmutableMultiset[T] with lor(
 }
 
 ///|
-pub impl[T : Compare] BitAnd for ImmutableMultiset[T] with land(
+pub impl[T : Compare] BitAnd for ImmutableMultiset[T] with fn land(
   self,
   other : ImmutableMultiset[T],
 ) {
@@ -578,7 +571,7 @@ pub impl[T : Compare] BitAnd for ImmutableMultiset[T] with land(
 }
 
 ///|
-pub impl[T : Compare] Sub for ImmutableMultiset[T] with sub(
+pub impl[T : Compare] Sub for ImmutableMultiset[T] with fn sub(
   self,
   other : ImmutableMultiset[T],
 ) {
@@ -586,7 +579,7 @@ pub impl[T : Compare] Sub for ImmutableMultiset[T] with sub(
 }
 
 ///|
-pub impl[T : Compare] Add for ImmutableMultiset[T] with add(
+pub impl[T : Compare] Add for ImmutableMultiset[T] with fn add(
   self,
   other : ImmutableMultiset[T],
 ) {
@@ -606,7 +599,7 @@ pub impl[T : Compare] Add for ImmutableMultiset[T] with add(
 ///   assert_eq!(set1 == set2, true)
 ///   assert_eq!(set1 == set3, false)
 /// }
-pub impl[T : Compare] Eq for ImmutableMultiset[T] with equal(
+pub impl[T : Compare] Eq for ImmutableMultiset[T] with fn equal(
   self : ImmutableMultiset[T],
   other : ImmutableMultiset[T],
 ) {
@@ -623,15 +616,25 @@ pub impl[T : Compare] Eq for ImmutableMultiset[T] with equal(
 }
 
 ///|
-pub impl[T : Show] Show for ImmutableMultiset[T] with output(
+pub impl[T : Show] Show for ImmutableMultiset[T] with fn output(
   self : ImmutableMultiset[T],
   logger : &Logger,
 ) {
-  logger.write_iter(
-    self.iter(),
-    prefix="@ImmutableMultiset.from_array([",
-    suffix="])",
-  )
+  logger.write_string("@ImmutableMultiset.from_array([")
+  let mut first = true
+  for item, count in self.iter2() {
+    if first {
+      first = false
+    } else {
+      logger.write_string(", ")
+    }
+    logger.write_string("(")
+    logger.write_object(item)
+    logger.write_string(", ")
+    logger.write_object(count)
+    logger.write_string(")")
+  }
+  logger.write_string("])")
 }
 
 ///|
@@ -676,7 +679,7 @@ pub fn[T : Compare] from_iter(iter : Iter[T]) -> ImmutableMultiset[T] {
 
 ///|
 /// Converts an iterator of (element, count) pairs to an ImmutableMultiset.
-pub fn[T : Compare] from_iter2(iter : Iter2[T, Int]) -> ImmutableMultiset[T] {
+pub fn[T : Compare] from_iter2(iter : Iter2[T, Int32]) -> ImmutableMultiset[T] {
   let mut set = ImmutableMultiset::new()
   for item, times in iter {
     set = set.add(item, times~)

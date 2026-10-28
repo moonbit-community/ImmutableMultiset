@@ -10,7 +10,7 @@ pub fn[T : Compare] from_array(Array[T]) -> ImmutableMultiset[T]
 
 pub fn[T : Compare] from_iter(Iter[T]) -> ImmutableMultiset[T]
 
-pub fn[T : Compare] from_iter2(Iter2[T, Int]) -> ImmutableMultiset[T]
+pub fn[T : Compare] from_iter2(Iter2[T, Int32]) -> ImmutableMultiset[T]
 
 pub fn[T] new() -> ImmutableMultiset[T]
 
@@ -20,29 +20,36 @@ pub fn[T : Compare] of(FixedArray[T]) -> ImmutableMultiset[T]
 
 // Types and methods
 pub struct ImmutableMultiset[T] {
-  map : @sorted_map.SortedMap[T, Int]
-  size : Int
+  map : @sorted_map.SortedMap[T, Int32]
+  size : Int32
 }
-pub fn[T : Compare] ImmutableMultiset::add(Self[T], T, times? : Int) -> Self[T]
+pub fn[T : Compare] ImmutableMultiset::add(Self[T], T, times? : Int32) -> Self[T]
 pub fn[T : Compare] ImmutableMultiset::contains(Self[T], T) -> Bool
-pub fn[T : Compare] ImmutableMultiset::count(Self[T], T) -> Int
+#alias("_[_]")
+pub fn[T : Compare] ImmutableMultiset::count(Self[T], T) -> Int32
 pub fn[T : Compare] ImmutableMultiset::difference(Self[T], Self[T]) -> Self[T]
 pub fn[T] ImmutableMultiset::elems(Self[T]) -> Iter[T]
-pub fn[T : Compare] ImmutableMultiset::filter(Self[T], (Int) -> Bool) -> Self[T]
-pub fn[T : Compare] ImmutableMultiset::filteri(Self[T], (T, Int) -> Bool) -> Self[T]
+pub fn[T : Compare] ImmutableMultiset::equal(Self[T], Self[T]) -> Bool
+pub fn[T : Compare] ImmutableMultiset::filter(Self[T], (Int32) -> Bool) -> Self[T]
+pub fn[T : Compare] ImmutableMultiset::filteri(Self[T], (T, Int32) -> Bool) -> Self[T]
 pub fn[T : Compare] ImmutableMultiset::intersection(Self[T], Self[T]) -> Self[T]
 pub fn[T] ImmutableMultiset::is_empty(Self[T]) -> Bool
-pub fn[T] ImmutableMultiset::iter(Self[T]) -> Iter[(T, Int)]
-pub fn[T] ImmutableMultiset::iter2(Self[T]) -> Iter2[T, Int]
-pub fn[T : Compare] ImmutableMultiset::map(Self[T], (Int) -> Int) -> Self[T]
-pub fn[T : Compare] ImmutableMultiset::mapi(Self[T], (T, Int) -> Int) -> Self[T]
+pub fn[T] ImmutableMultiset::iter(Self[T]) -> Iter[(T, Int32)]
+pub fn[T] ImmutableMultiset::iter2(Self[T]) -> Iter2[T, Int32]
+pub fn[T : Compare] ImmutableMultiset::land(Self[T], Self[T]) -> Self[T]
+pub fn[T : Compare] ImmutableMultiset::lor(Self[T], Self[T]) -> Self[T]
+pub fn[T : Compare] ImmutableMultiset::map(Self[T], (Int32) -> Int32) -> Self[T]
+pub fn[T : Compare] ImmutableMultiset::mapi(Self[T], (T, Int32) -> Int32) -> Self[T]
 pub fn[T] ImmutableMultiset::new() -> Self[T]
-pub fn[T : Compare] ImmutableMultiset::op_get(Self[T], T) -> Int
-pub fn[T : Compare] ImmutableMultiset::remove(Self[T], T, times? : Int) -> Self[T]
+pub fn[T : Compare] ImmutableMultiset::not_equal(Self[T], Self[T]) -> Bool
+pub fn[T : Show] ImmutableMultiset::output(Self[T], &Logger) -> Unit
+pub fn[T : Compare] ImmutableMultiset::remove(Self[T], T, times? : Int32) -> Self[T]
 pub fn[T : Compare] ImmutableMultiset::remove_all(Self[T], T) -> Self[T]
-pub fn[T : Compare] ImmutableMultiset::set(Self[T], T, times? : Int) -> Self[T]
-pub fn[T] ImmutableMultiset::size(Self[T]) -> Int
+pub fn[T : Compare] ImmutableMultiset::set(Self[T], T, times? : Int32) -> Self[T]
+pub fn[T] ImmutableMultiset::size(Self[T]) -> Int32
+pub fn[T : Compare] ImmutableMultiset::sub(Self[T], Self[T]) -> Self[T]
 pub fn[T : Compare] ImmutableMultiset::sum(Self[T], Self[T]) -> Self[T]
+pub fn[T : Show] ImmutableMultiset::to_string(Self[T]) -> String
 pub fn[T : Compare] ImmutableMultiset::union(Self[T], Self[T]) -> Self[T]
 pub impl[T : Compare] Add for ImmutableMultiset[T]
 pub impl[T : Compare] BitAnd for ImmutableMultiset[T]
@@ -54,4 +61,3 @@ pub impl[T : Compare] Sub for ImmutableMultiset[T]
 // Type aliases
 
 // Traits
-
