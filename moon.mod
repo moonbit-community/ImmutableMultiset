@@ -1,0 +1,15 @@
+name = "BigOrangeQWQ/immut_multiset"
+
+version = "0.1.5"
+
+readme = "README.md"
+
+repository = "https://github.com/BigOrangeQWQ/ImmutableMultiset"
+
+license = "Apache-2.0"
+
+keywords = [ "multiset", "data-structure", "immutable" ]
+
+description = "data structure for immutable multiset (bag)."
+
+source = "src"

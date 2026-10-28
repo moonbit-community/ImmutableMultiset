@@ -260,7 +260,7 @@ test "ImmutableHashMultiset::singleton" {
   let a = ImmutableHashMultiset::new()
   let b = a.add(1)
   let c = a.add(2)
-  assert_not_eq(b, c)
+  assert_true(b != c)
 }
 
 ///|
@@ -268,7 +268,7 @@ test "ImmutableHashMultiset::eq" {
   let a = ImmutableHashMultiset::new()
   let b = a.add(1).add(2)
   let c = a.add(1).add(2)
-  assert_eq(b, c)
+  assert_true(b == c)
 }
 
 ///|
