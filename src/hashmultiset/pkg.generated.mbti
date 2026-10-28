@@ -10,7 +10,7 @@ pub fn[T : Eq + Hash] from_array(Array[T]) -> ImmutableHashMultiset[T]
 
 pub fn[T : Eq + Hash] from_iter(Iter[T]) -> ImmutableHashMultiset[T]
 
-pub fn[T : Eq + Hash] from_iter2(Iter2[T, Int]) -> ImmutableHashMultiset[T]
+pub fn[T : Eq + Hash] from_iter2(Iter2[T, Int32]) -> ImmutableHashMultiset[T]
 
 pub fn[T] new() -> ImmutableHashMultiset[T]
 
@@ -20,29 +20,36 @@ pub fn[T : Eq + Hash] of(FixedArray[T]) -> ImmutableHashMultiset[T]
 
 // Types and methods
 pub struct ImmutableHashMultiset[T] {
-  map : @hashmap.HashMap[T, Int]
-  size : Int
+  map : @hashmap.HashMap[T, Int32]
+  size : Int32
 }
-pub fn[T : Eq + Hash] ImmutableHashMultiset::add(Self[T], T, times? : Int) -> Self[T]
+pub fn[T : Eq + Hash] ImmutableHashMultiset::add(Self[T], T, times? : Int32) -> Self[T]
 pub fn[T : Eq + Hash] ImmutableHashMultiset::contains(Self[T], T) -> Bool
-pub fn[T : Eq + Hash] ImmutableHashMultiset::count(Self[T], T) -> Int
+#alias("_[_]")
+pub fn[T : Eq + Hash] ImmutableHashMultiset::count(Self[T], T) -> Int32
 pub fn[T : Eq + Hash] ImmutableHashMultiset::difference(Self[T], Self[T]) -> Self[T]
 pub fn[T] ImmutableHashMultiset::elems(Self[T]) -> Iter[T]
-pub fn[T : Hash + Eq] ImmutableHashMultiset::filter(Self[T], (Int) -> Bool) -> Self[T]
-pub fn[T : Hash + Eq] ImmutableHashMultiset::filteri(Self[T], (T, Int) -> Bool) -> Self[T]
+pub fn[T : Eq + Hash] ImmutableHashMultiset::equal(Self[T], Self[T]) -> Bool
+pub fn[T : Hash + Eq] ImmutableHashMultiset::filter(Self[T], (Int32) -> Bool) -> Self[T]
+pub fn[T : Hash + Eq] ImmutableHashMultiset::filteri(Self[T], (T, Int32) -> Bool) -> Self[T]
 pub fn[T : Eq + Hash] ImmutableHashMultiset::intersection(Self[T], Self[T]) -> Self[T]
 pub fn[T] ImmutableHashMultiset::is_empty(Self[T]) -> Bool
-pub fn[T] ImmutableHashMultiset::iter(Self[T]) -> Iter[(T, Int)]
-pub fn[T] ImmutableHashMultiset::iter2(Self[T]) -> Iter2[T, Int]
-pub fn[T : Hash + Eq] ImmutableHashMultiset::map(Self[T], (Int) -> Int) -> Self[T]
-pub fn[T : Hash + Eq] ImmutableHashMultiset::mapi(Self[T], (T, Int) -> Int) -> Self[T]
+pub fn[T] ImmutableHashMultiset::iter(Self[T]) -> Iter[(T, Int32)]
+pub fn[T] ImmutableHashMultiset::iter2(Self[T]) -> Iter2[T, Int32]
+pub fn[T : Eq + Hash] ImmutableHashMultiset::land(Self[T], Self[T]) -> Self[T]
+pub fn[T : Eq + Hash] ImmutableHashMultiset::lor(Self[T], Self[T]) -> Self[T]
+pub fn[T : Hash + Eq] ImmutableHashMultiset::map(Self[T], (Int32) -> Int32) -> Self[T]
+pub fn[T : Hash + Eq] ImmutableHashMultiset::mapi(Self[T], (T, Int32) -> Int32) -> Self[T]
 pub fn[T] ImmutableHashMultiset::new() -> Self[T]
-pub fn[T : Eq + Hash] ImmutableHashMultiset::op_get(Self[T], T) -> Int
-pub fn[T : Eq + Hash] ImmutableHashMultiset::remove(Self[T], T, times? : Int) -> Self[T]
+pub fn[T : Eq + Hash] ImmutableHashMultiset::not_equal(Self[T], Self[T]) -> Bool
+pub fn[T : Show] ImmutableHashMultiset::output(Self[T], &Logger) -> Unit
+pub fn[T : Eq + Hash] ImmutableHashMultiset::remove(Self[T], T, times? : Int32) -> Self[T]
 pub fn[T : Hash + Eq] ImmutableHashMultiset::remove_all(Self[T], T) -> Self[T]
-pub fn[T : Eq + Hash] ImmutableHashMultiset::set(Self[T], T, times? : Int) -> Self[T]
-pub fn[T] ImmutableHashMultiset::size(Self[T]) -> Int
+pub fn[T : Eq + Hash] ImmutableHashMultiset::set(Self[T], T, times? : Int32) -> Self[T]
+pub fn[T] ImmutableHashMultiset::size(Self[T]) -> Int32
+pub fn[T : Eq + Hash] ImmutableHashMultiset::sub(Self[T], Self[T]) -> Self[T]
 pub fn[T : Eq + Hash] ImmutableHashMultiset::sum(Self[T], Self[T]) -> Self[T]
+pub fn[T : Show] ImmutableHashMultiset::to_string(Self[T]) -> String
 pub fn[T : Eq + Hash] ImmutableHashMultiset::union(Self[T], Self[T]) -> Self[T]
 pub impl[T : Eq + Hash] Add for ImmutableHashMultiset[T]
 pub impl[T : Eq + Hash] BitAnd for ImmutableHashMultiset[T]
@@ -54,4 +61,3 @@ pub impl[T : Eq + Hash] Sub for ImmutableHashMultiset[T]
 // Type aliases
 
 // Traits
-
